@@ -1,0 +1,23 @@
+app-login {
+            display: block;
+        }
+
+        .form-container {
+            max-width: 500px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #6c757d;
+        }
+
+        .form-footer a {
+            color: var(--primary);
+            text-decoration: none;
+        }
