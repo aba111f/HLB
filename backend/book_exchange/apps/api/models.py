@@ -77,6 +77,6 @@ class Review(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     reviewer = models.ForeignKey(User, related_name="reviews_written", on_delete=models.CASCADE)
     reviewed_user = models.ForeignKey(User, related_name="reviews_received", on_delete=models.CASCADE)
-    rating = models.PositiveSmallIntegerField()  # 1–5
+    rating = models.PositiveSmallIntegerField() 
     comment = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
