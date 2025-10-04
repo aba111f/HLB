@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, ViewChild, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-login',
@@ -10,9 +10,14 @@ export class LoginComponent {
 @ViewChild('registerSection') registerSection!: ElementRef;
 @ViewChild('login-section') loginSection!: ElementRef;
 
+showReg = false;
+@Output() toggleReg = new EventEmitter<boolean>();
+
   showRegister() {
-            this.registerSection.nativeElement.style.display = 'block';
-            this.loginSection.nativeElement.style.display = 'none';
-            this.registerSection.nativeElement.scrollIntoView({behavior: 'smooth'});
+            // this.registerSection.nativeElement.style.display = 'block';
+            // this.loginSection.nativeElement.style.display = 'none';
+            // this.registerSection.nativeElement.scrollIntoView({behavior: 'smooth'});
+          this.showReg = true;
+          this.toggleReg.emit(this.showReg);
         }
 }

@@ -1,4 +1,4 @@
-<section class="section">
+<section class="section" #loginSection>
                 <div class="container">
                     <div class="form-container">
                         <h2 style="text-align: center; margin-bottom: 30px; color: var(--primary);">Login to Your Account</h2>
@@ -13,7 +13,7 @@
                             </div>
                             <button type="submit" class="btn btn-primary" style="width: 100%;">Login</button>
                             <div class="form-footer">
-                                <p>Don't have an account? <a href="#" (click)="showRegister()">Register here</a></p>
+                                <p>Don't have an account? <a href="#" (click)="this.showRegister()">Register here</a></p>
                                 <p><a href="#">Forgot your password?</a></p>
                             </div>
                         </form>
