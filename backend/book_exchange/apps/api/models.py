@@ -1,13 +1,42 @@
 import uuid
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser,PermissionsMixin
+from django.contrib.auth.models import AbstractBaseUser,PermissionsMixin, BaseUserManager
 
+
+class CustomUserManager(BaseUserManager):
+    def create_user(self, email, username=None, password=None, **extra_fields):
+        if not email:
+            raise ValueError("Users must have an email address")
+        email = self.normalize_email(email)
+
+        if not username:
+            username = email.split("@")[0]
+
+        extra_fields.setdefault("is_active", True)
+
+        user = self.model(email=email, username=username, **extra_fields)
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
+    def create_superuser(self, email, username=None, password=None, **extra_fields):
+        extra_fields.setdefault("is_staff", True)
+        extra_fields.setdefault("is_superuser", True)
+        extra_fields.setdefault("is_active", True)
+
+        return self.create_user(email, username, password, **extra_fields)
 
 class User(AbstractBaseUser, PermissionsMixin):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     email = models.EmailField(unique=True)
     username = models.CharField(max_length=50, unique=True)
     date_joined = models.DateTimeField(auto_now_add=True)
+    city = models.CharField(max_length=100, blank=True, null=True)
+
+    is_active = models.BooleanField(default=True)
+    is_staff = models.BooleanField(default=False)
+    is_superuser = models.BooleanField(default=False)
+
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ["username"]
@@ -15,8 +44,12 @@ class User(AbstractBaseUser, PermissionsMixin):
     class Meta:
         indexes = [
             models.Index(fields=['email']),
-            models.Index(fields=['city']),
         ]
+
+    objects = CustomUserManager()
+
+    def __str__(self):
+        return f"{self.username} ({self.email})"
 
 
 class Book(models.Model):
@@ -51,7 +84,7 @@ class ExchangeRequest(models.Model):
     to_user = models.ForeignKey(User, related_name="received_requests", on_delete=models.CASCADE)
     offered_book = models.ForeignKey(Book, related_name="offered_in_requests", on_delete=models.CASCADE, null=True, blank=True)
     requested_book = models.ForeignKey(Book, related_name="requested_in_requests", on_delete=models.CASCADE)
-    message = models.TextField(blank=True, null=True)  # "Можно ли взять на неделю?"
+    message = models.TextField(blank=True, null=True) 
     status = models.CharField(max_length=20, choices=[
         ('pending', 'Pending'),
         ('accepted', 'Accepted'),
@@ -80,3 +113,6 @@ class Review(models.Model):
     rating = models.PositiveSmallIntegerField() 
     comment = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
+
+
+
