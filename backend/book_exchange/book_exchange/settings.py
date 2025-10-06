@@ -80,16 +80,35 @@ WSGI_APPLICATION = 'book_exchange.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
+# Add these at the top of your settings.py
+import os
+from dotenv import load_dotenv
+from urllib.parse import urlparse, parse_qsl
+
+ENV_Path = BASE_DIR.parents[2] / '.env'
+# print(ENV_Path)
+load_dotenv(dotenv_path=ENV_Path)
+
+# Replace the DATABASES section of your settings.py with this
+tmpPostgres = urlparse(os.getenv("DATABASE_URL"))
+# print(BASE_DIR.parent.parent.parent)
+port = os.getenv("DB_PORT")
+
+
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'BookExchange',
-        'USER': 'postgres',
-        'PASSWORD': '1234',
-        'HOST': 'localhost', 
-        'PORT': '5432',
+        'NAME': tmpPostgres.path.replace('/', ''),
+        'USER': tmpPostgres.username,
+        'PASSWORD': tmpPostgres.password,
+        'HOST': tmpPostgres.hostname,
+        'PORT': port,
+        'OPTIONS': dict(parse_qsl(tmpPostgres.query)),
     }
 }
+
+
 
 
 # Password validation
