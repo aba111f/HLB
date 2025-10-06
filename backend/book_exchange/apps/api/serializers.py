@@ -1,51 +1,90 @@
 from rest_framework import serializers
-from django.contrib.auth import get_user_model
-from django.contrib.auth.password_validation import validate_password
-
-from .models import Book, ExchangeRequest
-
-User = get_user_model()
+from .models import User, Book, ExchangeRequest, Deal, Review
 
 
-# --- User Serializer ---
 class UserSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(write_only=True, validators=[validate_password])
+    password = serializers.CharField(write_only=True)
 
     class Meta:
         model = User
-        fields = ["id", "username", "email", "password", "role", "created_at"]
-        read_only_fields = ["id", "role", "created_at"]
+        fields = ['id', 'email', 'username', 'password', 'city', 'date_joined']
+        read_only_fields = ['id', 'date_joined']
 
     def create(self, validated_data):
-        password = validated_data.pop("password")
+        password = validated_data.pop('password', None)
         user = User(**validated_data)
-        user.set_password(password)
+        if password:
+            user.set_password(password)
         user.save()
         return user
 
 
-# --- Book Serializer ---
 class BookSerializer(serializers.ModelSerializer):
-    owner = serializers.StringRelatedField(read_only=True)
+    owner = UserSerializer(read_only=True)
 
     class Meta:
         model = Book
-        fields = ["id", "title", "author", "description", "owner", "created_at"]
-        read_only_fields = ["id", "owner", "created_at"]
+        fields = [
+            "id",
+            "owner",
+            "title",
+            "author",
+            "genre",
+            "description",
+            "condition",
+            "availability",
+            "created_at",
+        ]
+        read_only_fields = ["id", "created_at", "owner"]
 
 
-# --- ExchangeRequest Serializer ---
 class ExchangeRequestSerializer(serializers.ModelSerializer):
-    sender = serializers.StringRelatedField(read_only=True)
-    receiver = serializers.StringRelatedField(read_only=True)
+    from_user = UserSerializer(read_only=True)
+    to_user = UserSerializer(read_only=True)
+    offered_book = BookSerializer(read_only=True)
+    requested_book = BookSerializer(read_only=True)
 
     class Meta:
         model = ExchangeRequest
-        fields = ["id", "sender", "receiver", "book", "status", "created_at"]
-        read_only_fields = ["id", "sender", "status", "created_at"]
+        fields = [
+            "id",
+            "from_user",
+            "to_user",
+            "offered_book",
+            "requested_book",
+            "message",
+            "status",
+            "created_at",
+        ]
+        read_only_fields = ["id", "created_at", "status"]
 
-    def validate(self, data):
-        book = data.get("book")
-        if book.owner == self.context["request"].user:
-            raise serializers.ValidationError("You cannot request your own book")
-        return data
+    def create(self, validated_data):
+        request = self.context.get("request")
+        if request:
+            validated_data["from_user"] = request.user
+        return super().create(validated_data)
+
+
+class DealSerializer(serializers.ModelSerializer):
+    exchange_request = ExchangeRequestSerializer(read_only=True)
+
+    class Meta:
+        model = Deal
+        fields = ["id", "exchange_request", "completed_at"]
+        read_only_fields = ["id", "completed_at"]
+
+
+class ReviewSerializer(serializers.ModelSerializer):
+    reviewer = UserSerializer(read_only=True)
+    reviewed_user = UserSerializer(read_only=True)
+
+    class Meta:
+        model = Review
+        fields = ["id", "reviewer", "reviewed_user", "rating", "comment", "created_at"]
+        read_only_fields = ["id", "created_at"]
+
+    def create(self, validated_data):
+        request = self.context.get("request")
+        if request:
+            validated_data["reviewer"] = request.user
+        return super().create(validated_data)

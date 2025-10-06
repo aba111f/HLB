@@ -16,12 +16,19 @@ class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
+    # def get_permissions(self):
+    #     if self.action in ["create"]:
+    #         return [permissions.AllowAny()]
+    #     elif self.action in ["list", "destroy"]:
+    #         return [permissions.IsAdminUser()]
+    #     return [permissions.IsAuthenticated()]
     def get_permissions(self):
-        if self.action in ["create"]:
+        if self.action == "create":
             return [permissions.AllowAny()]
-        elif self.action in ["list", "destroy"]:
+        elif self.action == "destroy":
             return [permissions.IsAdminUser()]
         return [permissions.IsAuthenticated()]
+
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -65,25 +72,24 @@ class ExchangeRequestViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         return ExchangeRequest.objects.filter(
-            sender=self.request.user
-        ) | ExchangeRequest.objects.filter(receiver=self.request.user)
+            from_user=self.request.user
+        ) | ExchangeRequest.objects.filter(to_user=self.request.user)
 
     def perform_create(self, serializer):
-        receiver_id = self.request.data.get("receiver_id")
-        receiver = get_object_or_404(User, id=receiver_id)
+        to_user_id = self.request.data.get("to_user_id")
+        to_user = get_object_or_404(User, id=to_user_id)
 
-        if receiver == self.request.user:
+        if to_user == self.request.user:
             return Response({"error": "You cannot send a request to yourself"},
                             status=status.HTTP_400_BAD_REQUEST)
 
-        serializer.save(sender=self.request.user, receiver=receiver)
-        logger.info(f"Exchange request from {self.request.user} to {receiver}")
-
+        serializer.save(from_user=self.request.user, to_user=to_user)
+        logger.info(f"Exchange request from {self.request.user} to {to_user}")
 
     @action(detail=True, methods=["post"], url_path="accept")
     def accept_request(self, request, pk=None):
         exchange_request = self.get_object()
-        if exchange_request.receiver != request.user:
+        if exchange_request.to_user != request.user:
             return Response({"error": "Not authorized"}, status=status.HTTP_403_FORBIDDEN)
 
         exchange_request.status = "accepted"
@@ -94,7 +100,7 @@ class ExchangeRequestViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=["post"], url_path="reject")
     def reject_request(self, request, pk=None):
         exchange_request = self.get_object()
-        if exchange_request.receiver != request.user:
+        if exchange_request.to_user != request.user:
             return Response({"error": "Not authorized"}, status=status.HTTP_403_FORBIDDEN)
 
         exchange_request.status = "rejected"
