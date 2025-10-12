@@ -20,7 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 
-MEDIA_URL = '/static/'
+MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'static')
 print(MEDIA_ROOT)
 
@@ -91,17 +91,13 @@ WSGI_APPLICATION = 'book_exchange.wsgi.application'
 
 
 
-
 ENV_Path = BASE_DIR.parents[2] / '.env'
-# print(ENV_Path)
+print(ENV_Path)
 load_dotenv(dotenv_path=ENV_Path)
 
-# Replace the DATABASES section of your settings.py with this
 tmpPostgres = urlparse(os.getenv("DATABASE_URL"))
-# print(BASE_DIR.parent.parent.parent)
+print(BASE_DIR.parent.parent.parent)
 port = os.getenv("DB_PORT")
-
-
 
 DATABASES = {
     'default': {
@@ -114,8 +110,6 @@ DATABASES = {
         'OPTIONS': dict(parse_qsl(tmpPostgres.query)),
     }
 }
-
-
 
 
 # Password validation
