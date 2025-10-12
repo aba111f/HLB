@@ -21,8 +21,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'static')
-print(MEDIA_ROOT)
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# print(MEDIA_ROOT)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
@@ -64,6 +64,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'book_exchange.urls'
@@ -92,11 +93,11 @@ WSGI_APPLICATION = 'book_exchange.wsgi.application'
 
 
 ENV_Path = BASE_DIR.parents[2] / '.env'
-print(ENV_Path)
+# print(ENV_Path)
 load_dotenv(dotenv_path=ENV_Path)
 
 tmpPostgres = urlparse(os.getenv("DATABASE_URL"))
-print(BASE_DIR.parent.parent.parent)
+# print(BASE_DIR.parent.parent.parent)
 port = os.getenv("DB_PORT")
 
 DATABASES = {
