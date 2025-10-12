@@ -1,25 +1,31 @@
-export interface User {
-    id: string,
+export interface UserPost {
     email: string,
     username: string,
-    date_joined: Date,
     city: string,
+    password: string,
+    user_image: File | null
+}
+
+export interface UserGet {
+    id: string,
+    date_joined: Date,
     is_active: boolean,
     is_staff: boolean,
     is_superuser: boolean,
-    password: string,
-    last_login: Date
+    last_login: Date,
+    user: UserPost
 }
 
 
 export interface Book{
     id: string,
-    owner: User,
+    owner: UserGet,
     title: string,
     author: string,
     genre: string,
     description: string,
-    conditino: string,
+    condition: string,
     availability: string,
-    created_at: Date
+    created_at: Date,
+    book_image: File | null
 }
