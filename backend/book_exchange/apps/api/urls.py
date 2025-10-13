@@ -1,7 +1,7 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
-from .views import UserViewSet, BookViewSet, ExchangeRequestViewSet
+from rest_framework_simplejwt.views import TokenRefreshView
+from .views import UserViewSet, BookViewSet, ExchangeRequestViewSet,CustomLoginView
 
 router = DefaultRouter()                
 router.register(r'users', UserViewSet, basename='user')
@@ -10,7 +10,7 @@ router.register(r'exchange-requests', ExchangeRequestViewSet, basename='exchange
 
 urlpatterns = [
     path('', include(router.urls)),  
-    path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('login/', CustomLoginView.as_view(), name='custom_login'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 ]
 

@@ -4,6 +4,10 @@ from rest_framework.response import Response
 from rest_framework.decorators import action
 from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+from django.contrib.auth import authenticate
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework.views import APIView
 
 from .models import Book, ExchangeRequest
 from .serializers import UserSerializer, BookSerializer, ExchangeRequestSerializer
@@ -11,22 +15,40 @@ from .serializers import UserSerializer, BookSerializer, ExchangeRequestSerializ
 logger = logging.getLogger(__name__)
 User = get_user_model()
 
+# --- Login view ---
+
+class CustomLoginView(APIView):
+    def post(self, request):
+        email = request.data.get("email")
+        password = request.data.get("password")
+
+        if not email or not password:
+            return Response({"detail": "Email and password are required."}, status=status.HTTP_400_BAD_REQUEST)
+
+        user = authenticate(email=email, password=password)
+
+        if user is None:
+            return Response({"detail": "Invalid email or password."}, status=status.HTTP_401_UNAUTHORIZED)
+
+        refresh = RefreshToken.for_user(user)
+
+        return Response({
+            "id": str(user.id),
+            "access": str(refresh.access_token),
+            "refresh": str(refresh),
+        }, status=status.HTTP_200_OK)
+
+
 # --- User ViewSet ---
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
-    # def get_permissions(self):
-    #     if self.action in ["create"]:
-    #         return [permissions.AllowAny()]
-    #     elif self.action in ["list", "destroy"]:
-    #         return [permissions.IsAdminUser()]
-    #     return [permissions.IsAuthenticated()]
     def get_permissions(self):
         if self.action == "create":
             return [permissions.AllowAny()]
         elif self.action == "destroy":
-            return [permissions.IsAdminUser()]
+            return [permissions.IsAuthenticated()]
         return [permissions.IsAuthenticated()]
 
 
@@ -39,6 +61,29 @@ class UserViewSet(viewsets.ModelViewSet):
         self.perform_create(serializer)
         logger.info(f"User created: {serializer.data['email']}")
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+    def destroy(self, request, *args, **kwargs):
+        uuid = kwargs.get("pk")
+        email = request.data.get("email")
+        password = request.data.get("password")
+
+        # print(uuid, email, password)
+
+
+        if not all([uuid, email, password]):
+            return Response({"detail": "UUID, email, and password are required."}, status=400)
+
+        user = authenticate(email=email, password=password)
+        if user is None:
+            return Response({"detail": "Invalid credentials."}, status=403)
+
+        try:
+            target_user = User.objects.get(id=uuid)
+        except User.DoesNotExist:
+            # print(uuid)
+            return Response({"detail": "User not found."}, status=404)
+
+        target_user.delete()
+        return Response({"detail": "User deleted successfully."}, status=204)
 
 
 # --- Book ViewSet ---
