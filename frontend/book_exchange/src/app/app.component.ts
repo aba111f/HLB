@@ -10,7 +10,7 @@ import { FeaturesComponent } from './shared/components/features/features.compone
 import { BooksComponent } from './shared/components/books/books.component';
 @Component({
   selector: 'app-root',
-  imports: [HeaderComponent, FooterComponent, HeroComponent, LoginComponent, RegisterComponent, FeaturesComponent, BooksComponent, CommonModule],
+  imports: [HeaderComponent, FooterComponent, HeroComponent, LoginComponent, RegisterComponent, FeaturesComponent, BooksComponent, CommonModule,RouterOutlet],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })

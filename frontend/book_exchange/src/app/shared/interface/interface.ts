@@ -10,8 +10,6 @@ export interface UserGet {
     id: string,
     date_joined: Date,
     is_active: boolean,
-    is_staff: boolean,
-    is_superuser: boolean,
     last_login: Date,
     user: UserPost
 }

@@ -1,0 +1,29 @@
+<div class="profile-container">
+  <h2>My Profile</h2>
+
+  <div class="profile-card">
+    <div class="image-section">
+      <img *ngIf="imagePreview; else noImage" [src]="imagePreview" alt="User Image">
+      <ng-template #noImage>
+        <div class="placeholder">No Image</div>
+      </ng-template>
+      <input type="file" (change)="onImageSelected($event)">
+    </div>
+
+    <div class="info-section">
+      <label>Email</label>
+      <input type="email" [(ngModel)]="user.email" name="email">
+
+      <label>Username</label>
+      <input type="text" [(ngModel)]="user.username" name="username">
+
+      <label>City</label>
+      <input type="text" [(ngModel)]="user.city" name="city">
+
+      <label>Password</label>
+      <input type="password" [(ngModel)]="user.password" name="password">
+
+      <button (click)="saveProfile()">Save Changes</button>
+    </div>
+  </div>
+</div>
