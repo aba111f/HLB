@@ -1,8 +1,11 @@
 import { Component, ElementRef, ViewChild, Output, EventEmitter } from '@angular/core';
-
+import { UserPost } from '../../interface/interface';
+import { AuthService } from '../../../core/services/auth/auth.service';
+import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-login',
-  imports: [],
+  imports: [FormsModule, CommonModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
@@ -10,14 +13,40 @@ export class LoginComponent {
 @ViewChild('registerSection') registerSection!: ElementRef;
 @ViewChild('login-section') loginSection!: ElementRef;
 
+  constructor(private auth_service: AuthService){}
+
 showReg = false;
 @Output() toggleReg = new EventEmitter<boolean>();
 
   showRegister() {
-            // this.registerSection.nativeElement.style.display = 'block';
-            // this.loginSection.nativeElement.style.display = 'none';
-            // this.registerSection.nativeElement.scrollIntoView({behavior: 'smooth'});
-          this.showReg = true;
-          this.toggleReg.emit(this.showReg);
+      // this.registerSection.nativeElement.style.display = 'block';
+      // this.loginSection.nativeElement.style.display = 'none';
+      // this.registerSection.nativeElement.scrollIntoView({behavior: 'smooth'});
+    this.showReg = true;
+    this.toggleReg.emit(this.showReg);
+  }
+
+  user: UserPost = {
+    username: '',
+    email: '',
+    password: '',
+    city: '',
+    user_image: null
+  };
+
+  onsubmit(){
+    if(this.user.email && this.user.password){
+      this.auth_service.login_user_token_data(this.user).subscribe({
+        next: (res) => {
+          console.log('successfully logged in: ', res);
+        },
+        error: (err) => {
+          console.log('Error: ', err)
         }
+      });
+    }
+    else{
+      window.alert('Error occured: not logged in');
+    }
+  }
 }

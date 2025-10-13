@@ -68,6 +68,15 @@ showLoginBool = false;
         }
       }); 
       console.log('registered');
+      this.user.username = "";
+      this.user.email = "";
+      this.user.city = "";
+      this.user.password= "";
+      this.user.user_image = null;
+      this.confirmPassword = "";
+      this.previewUrl = null;
+      this.showLoginBool = true;
+      this.toggleLogin.emit(this.showLoginBool);
     }
     else{
       window.alert('something went wrong, the some data is empty');
