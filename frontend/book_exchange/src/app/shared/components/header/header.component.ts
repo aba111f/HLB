@@ -1,14 +1,15 @@
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter, OnInit } from '@angular/core';
 import { RegisterComponent } from '../register/register.component';
 import { LoginComponent } from '../login/login.component';
 import { CommonModule } from '@angular/common';
+import { SharingService } from '../../../core/services/sharing/sharing.service';
 @Component({
   selector: 'app-header',
   imports: [CommonModule],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css'
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnInit{
   isPressedLogin: boolean = false;
   isPressedReg: boolean = false;
   show_login_btn: boolean = true;
@@ -16,6 +17,16 @@ export class HeaderComponent {
 
   @Output() toggleLogin = new EventEmitter<boolean>();
   @Output() toggleReg = new EventEmitter<boolean>();
+
+  constructor(private shared_service: SharingService){}
+  ngOnInit(): void {
+      this.shared_service.current_state.subscribe(value => {
+        this.show_login_btn = value;
+        this.show_reg_btn = value;
+      }
+      );
+  }
+
   showLogin(){
     this.isPressedLogin = true;
     this.isPressedReg = false;
@@ -28,10 +39,7 @@ export class HeaderComponent {
     this.toggleReg.emit(this.isPressedReg);
   }
   
-  hide_login_reg_btn(value: boolean){
-    this.isPressedLogin = false;
-    this.isPressedReg = false;
-  }
+
 
 
 }
