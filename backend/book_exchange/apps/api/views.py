@@ -44,6 +44,7 @@ class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
+    #Permission check
     def get_permissions(self):
         if self.action == "create":
             return [permissions.AllowAny()]
@@ -51,7 +52,7 @@ class UserViewSet(viewsets.ModelViewSet):
             return [permissions.IsAuthenticated()]
         return [permissions.IsAuthenticated()]
 
-
+    #Create
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         if not serializer.is_valid():
@@ -61,6 +62,8 @@ class UserViewSet(viewsets.ModelViewSet):
         self.perform_create(serializer)
         logger.info(f"User created: {serializer.data['email']}")
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+    
+    #Delete 
     def destroy(self, request, *args, **kwargs):
         uuid = kwargs.get("pk")
         email = request.data.get("email")
@@ -84,6 +87,42 @@ class UserViewSet(viewsets.ModelViewSet):
 
         target_user.delete()
         return Response({"detail": "User deleted successfully."}, status=204)
+    # Get all
+    def list(self, request, *args, **kwargs):
+        users = self.get_queryset()
+        serializer = self.get_serializer(users, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    # Get data of specific user
+    def retrieve(self, request, pk=None):
+        try:
+            user = User.objects.get(pk=pk)
+        except User.DoesNotExist:
+            return Response({"detail": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+        serializer = self.get_serializer(user)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    # Filter users by cities/book
+    @action(detail=False, methods=['post'], url_path='filter')
+    def filter_users(self, request):
+        cities = request.data.get('cities', [])
+        books = request.data.get('books', [])
+
+        users = User.objects.all()
+
+        #Uses "OR" filtering
+        if cities:
+            users = users.filter(city__in=cities)
+
+        #Uses "AND" filtering
+        if books:
+            for book_title in books:
+                users = users.filter(books__title=book_title)
+
+        users = users.distinct()
+
+        serializer = self.get_serializer(users, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 # --- Book ViewSet ---
