@@ -8,16 +8,20 @@ export interface UserPost {
 
 export interface UserGet {
     id: string,
-    date_joined: Date,
-    is_active: boolean,
-    last_login: Date,
+    date_joined: Date | null,
+    // is_active: boolean | null,
+    // last_login: Date | null,
     user: UserPost
 }
 
 export interface UserData {
     id: string,
     email: string,
-    password: string
+    password: string,
+    date_joined: Date | null,
+    username: string,
+    user_image: File | null,
+    city: string
 }
 
 export interface Book{

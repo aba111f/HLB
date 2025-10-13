@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UserPost } from '../../interface/interface';
+import { UserData, UserGet, UserPost } from '../../interface/interface';
 import { ProfileService } from '../../../core/services/profile/profile.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -11,13 +11,30 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent implements OnInit {
-  user: UserPost = {
+  // user: UserPost = {
+    // email: '',
+    // username: '',
+    // city: '',
+    // password: '',
+    // user_image: null
+  // };
+  // user_source: UserGet = {
+    // id: '',
+    // date_joined: null,
+  //   // is_active: null,
+  //   // last_login: null,
+  //   user: this.user
+  // };
+  user: UserData = {
+    id: '',
+    date_joined: null,
     email: '',
     username: '',
     city: '',
     password: '',
     user_image: null
   };
+  
 
   imagePreview: string | ArrayBuffer | null = null;
 
@@ -30,9 +47,12 @@ export class ProfileComponent implements OnInit {
   loadUser() {
     this.profileService.getCurrentUser().subscribe({
       next: (data) => {
+        console.log(data);
         this.user = data;
+
         if (data.user_image) {
-          this.imagePreview = 'http://localhost:8000' + data.user_image;
+          this.imagePreview = '' + data.user_image;
+          
         }
       },
       error: (err) => console.error('Error loading user:', err)

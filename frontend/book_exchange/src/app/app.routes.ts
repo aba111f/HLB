@@ -1,11 +1,11 @@
 import { Routes } from '@angular/router';
 import { ProfileComponent } from './shared/components/profile/profile.component';
-import { AppComponent } from './app.component';
+import { HomepageComponent } from './shared/components/homepage/homepage.component';
 
 export const routes: Routes = [
     {
         path:'',
-        component: AppComponent
+        component: HomepageComponent
     },
     {
         path: 'profile',

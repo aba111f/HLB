@@ -30,6 +30,7 @@ export class AuthService {
     return this.http.post(this.apiUrl + '/users/', formData);
   }
   username: string = '';
+  
   // LOGIN SECTION
   login_user_token_data(user: UserPost): Observable<Token>{
     const formData = new FormData();
