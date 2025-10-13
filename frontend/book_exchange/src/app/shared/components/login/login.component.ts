@@ -16,7 +16,10 @@ export class LoginComponent {
   constructor(private auth_service: AuthService){}
 
 showReg = false;
+showLogin = true;
 @Output() toggleReg = new EventEmitter<boolean>();
+@Output() toggleLogin = new EventEmitter<boolean>();
+
 
   showRegister() {
       // this.registerSection.nativeElement.style.display = 'block';
@@ -44,9 +47,13 @@ showReg = false;
           console.log('Error: ', err)
         }
       });
+      this.showLogin = false;
+      this.toggleLogin.emit(this.showLogin);
+      
     }
     else{
       window.alert('Error occured: not logged in');
     }
   }
+  
 }

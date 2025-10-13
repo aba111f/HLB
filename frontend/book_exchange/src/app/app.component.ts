@@ -23,6 +23,10 @@ export class AppComponent {
     this.showLogin = value;
     this.showReg = false;
   }
+  LoginDisable(value: boolean){
+    this.showLogin = value;
+
+  }
 
   onToggleReg(value: boolean){
     this.showReg = value;
