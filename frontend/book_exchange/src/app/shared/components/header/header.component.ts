@@ -3,6 +3,9 @@ import { RegisterComponent } from '../register/register.component';
 import { LoginComponent } from '../login/login.component';
 import { CommonModule } from '@angular/common';
 import { SharingService } from '../../../core/services/sharing/sharing.service';
+
+import { ProfileService } from '../../../core/services/profile/profile.service';
+import { UserGet } from '../../interface/interface';
 @Component({
   selector: 'app-header',
   imports: [CommonModule],
@@ -18,11 +21,32 @@ export class HeaderComponent implements OnInit{
   @Output() toggleLogin = new EventEmitter<boolean>();
   @Output() toggleReg = new EventEmitter<boolean>();
 
-  constructor(private shared_service: SharingService){}
+  user_source: UserGet = {
+    id: '',
+    date_joined: null,
+    // is_active: null,
+    // last_login: null,
+    user: {
+      email: '',
+      username: '',
+      city: '',
+      password: '',
+      user_image: null
+    }
+  };
+
+  constructor(private shared_service: SharingService,
+              private profile_service: ProfileService
+  )
+  {
+    
+  }
   ngOnInit(): void {
       this.shared_service.current_state.subscribe(value => {
         this.show_login_btn = value;
         this.show_reg_btn = value;
+        
+        
       }
       );
   }

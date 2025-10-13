@@ -3,14 +3,11 @@ import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { HeaderComponent } from './shared/components/header/header.component';
 import { FooterComponent } from './shared/components/footer/footer.component';
-import { HeroComponent } from './shared/components/hero/hero.component';
 import { LoginComponent } from './shared/components/login/login.component';
 import { RegisterComponent } from './shared/components/register/register.component';
-import { FeaturesComponent } from './shared/components/features/features.component';
-import { BooksComponent } from './shared/components/books/books.component';
 @Component({
   selector: 'app-root',
-  imports: [HeaderComponent, FooterComponent, HeroComponent, LoginComponent, RegisterComponent, FeaturesComponent, BooksComponent, CommonModule,RouterOutlet],
+  imports: [CommonModule,RouterOutlet, HeaderComponent, FooterComponent, LoginComponent, RegisterComponent,],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })

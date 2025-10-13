@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { UserPost } from '../../../shared/interface/interface';
+import { UserData, UserPost } from '../../../shared/interface/interface';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -11,11 +11,11 @@ export class ProfileService {
 
   constructor(private http: HttpClient) {}
 
-  getCurrentUser(): Observable<UserPost> {
+  getCurrentUser(): Observable<UserData> {
 
     let id=localStorage.getItem('id');
 
-    return this.http.get<UserPost>(`${this.baseUrl}/${id}/`);
+    return this.http.get<UserData>(`${this.baseUrl}/${id}/`);
   }
 
   updateUser(user: UserPost): Observable<any> {

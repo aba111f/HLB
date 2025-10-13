@@ -4,6 +4,7 @@ import { AuthService } from '../../../core/services/auth/auth.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { SharingService } from '../../../core/services/sharing/sharing.service';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-login',
   imports: [FormsModule, CommonModule],
@@ -15,7 +16,8 @@ export class LoginComponent {
 @ViewChild('login-section') loginSection!: ElementRef;
 
   constructor(private auth_service: AuthService, 
-              private shared_service: SharingService
+              private shared_service: SharingService,
+              private router: Router
   ){}
 
 showReg = false;
@@ -53,6 +55,7 @@ showLogin = true;
       this.showLogin = false;
       this.toggleLogin.emit(this.showLogin);
       this.shared_service.set_bool(this.showLogin);
+      this.router.navigate(['/profile']);
     }
     else{
       window.alert('Error occured: not logged in');
