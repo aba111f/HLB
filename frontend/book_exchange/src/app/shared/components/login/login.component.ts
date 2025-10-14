@@ -54,7 +54,7 @@ showLogin = true;
       });
       this.showLogin = false;
       this.toggleLogin.emit(this.showLogin);
-      this.shared_service.set_bool(this.showLogin);
+      this.shared_service.check_auth_state(this.showLogin);
       this.router.navigate(['/profile']);
     }
     else{

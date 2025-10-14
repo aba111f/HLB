@@ -17,6 +17,7 @@ export class HeaderComponent implements OnInit{
   isPressedReg: boolean = false;
   show_login_btn: boolean = true;
   show_reg_btn: boolean = true;
+  image_preview: string = '';
 
   @Output() toggleLogin = new EventEmitter<boolean>();
   @Output() toggleReg = new EventEmitter<boolean>();
@@ -42,13 +43,14 @@ export class HeaderComponent implements OnInit{
     
   }
   ngOnInit(): void {
-      this.shared_service.current_state.subscribe(value => {
+
+      this.shared_service.isAuthenticated$.subscribe(value => {
         this.show_login_btn = value;
         this.show_reg_btn = value;
-        
-        
-      }
-      );
+      });
+      this.shared_service.image.subscribe(value => {
+        this.image_preview = value;
+      });
   }
 
   showLogin(){

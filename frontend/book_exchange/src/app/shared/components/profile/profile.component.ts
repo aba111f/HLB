@@ -3,6 +3,7 @@ import { UserData, UserGet, UserPost } from '../../interface/interface';
 import { ProfileService } from '../../../core/services/profile/profile.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { SharingService } from '../../../core/services/sharing/sharing.service';
 
 @Component({
   selector: 'app-profile', 
@@ -38,10 +39,13 @@ export class ProfileComponent implements OnInit {
 
   imagePreview: string | ArrayBuffer | null = null;
 
-  constructor(private profileService: ProfileService) {}
+  constructor(private profileService: ProfileService, 
+              private shared_service: SharingService
+  ) {}
 
   ngOnInit(): void {
     this.loadUser();
+
   }
 
   loadUser() {
@@ -52,7 +56,7 @@ export class ProfileComponent implements OnInit {
 
         if (data.user_image) {
           this.imagePreview = '' + data.user_image;
-          
+          this.shared_service.set_image(this.imagePreview);
         }
       },
       error: (err) => console.error('Error loading user:', err)
