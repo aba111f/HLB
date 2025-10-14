@@ -3,6 +3,7 @@ import { Component, ElementRef, ViewChild, Output, EventEmitter} from '@angular/
 import { UserPost } from '../../interface/interface';
 import { FormsModule} from '@angular/forms';
 import { AuthService } from '../../../core/services/auth/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -18,7 +19,9 @@ showLoginBool = false;
 @Output() toggleLogin = new EventEmitter<boolean>();
 
 
-  constructor(private auth_service: AuthService){
+  constructor(private auth_service: AuthService,
+              private router: Router
+  ){
     console.log(this.auth_service);
   }
 
@@ -27,9 +30,9 @@ showLoginBool = false;
     // this.registerSection.nativeElement.style.display = 'none';
     // this.loginSection.nativeElement.scrollIntoView({behavior: 'smooth'});
 
-    this.showLoginBool = true;
-    this.toggleLogin.emit(this.showLoginBool);
-    
+    // this.showLoginBool = true;
+    // this.toggleLogin.emit(this.showLoginBool);
+    this.router.navigate(['/login']);
             
   }
 

@@ -3,11 +3,10 @@ import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { HeaderComponent } from './shared/components/header/header.component';
 import { FooterComponent } from './shared/components/footer/footer.component';
-import { LoginComponent } from './shared/components/login/login.component';
-import { RegisterComponent } from './shared/components/register/register.component';
+
 @Component({
   selector: 'app-root',
-  imports: [CommonModule,RouterOutlet, HeaderComponent, FooterComponent, LoginComponent, RegisterComponent,],
+  imports: [CommonModule,RouterOutlet, HeaderComponent, FooterComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
@@ -20,10 +19,10 @@ export class AppComponent {
     this.showLogin = value;
     this.showReg = false;
   }
-  LoginDisable(value: boolean){
-    this.showLogin = value;
+  // LoginDisable(value: boolean){
+  //   this.showLogin = value;
 
-  }
+  // }
 
   onToggleReg(value: boolean){
     this.showReg = value;

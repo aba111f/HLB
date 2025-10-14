@@ -40,5 +40,9 @@ export class SharingService {
 
   set_image(value: string){
     this.imageSubject.next(value);
+    if (typeof window !== 'undefined' && window.localStorage) {
+      localStorage.setItem('image', value);
+    }
+    
   }
 }

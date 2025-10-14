@@ -14,9 +14,11 @@
                         <div class="auth-buttons">
                             <button class="btn btn-outline" *ngIf="show_login_btn" (click)="this.showLogin()">Login</button>
                             <button class="btn btn-primary" *ngIf="show_reg_btn" (click)="this.showReg()">Register</button>
-                            <div class="image-preview" *ngIf="!show_login_btn">
-                                <img [src]="image_preview" alt='profile'>
-                            </div>
+                            <button class="profile-btn" (click)="go_profile()">
+                                <div class="image-preview" *ngIf="!show_login_btn">
+                                    <img [src]="image_preview" alt='profile'>
+                                </div>
+                            </button>
                             
                         </div>
                     </nav>

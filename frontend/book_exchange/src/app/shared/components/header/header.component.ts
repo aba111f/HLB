@@ -3,7 +3,7 @@ import { RegisterComponent } from '../register/register.component';
 import { LoginComponent } from '../login/login.component';
 import { CommonModule } from '@angular/common';
 import { SharingService } from '../../../core/services/sharing/sharing.service';
-
+import { Router } from '@angular/router';
 import { ProfileService } from '../../../core/services/profile/profile.service';
 import { UserGet } from '../../interface/interface';
 @Component({
@@ -37,11 +37,13 @@ export class HeaderComponent implements OnInit{
   };
 
   constructor(private shared_service: SharingService,
-              private profile_service: ProfileService
+              private profile_service: ProfileService,
+              private router: Router
   )
   {
     
   }
+  
   ngOnInit(): void {
 
       this.shared_service.isAuthenticated$.subscribe(value => {
@@ -51,6 +53,10 @@ export class HeaderComponent implements OnInit{
       this.shared_service.image.subscribe(value => {
         this.image_preview = value;
       });
+      if (typeof window !== 'undefined' && window.localStorage) {
+      // localStorage.setItem('image', value);
+      this.image_preview = localStorage.getItem('image') + '';
+    }
   }
 
   showLogin(){
@@ -65,7 +71,9 @@ export class HeaderComponent implements OnInit{
     this.toggleReg.emit(this.isPressedReg);
   }
   
-
+  go_profile(){
+    this.router.navigate(['/profile']);
+  } 
 
 
 }

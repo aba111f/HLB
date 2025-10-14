@@ -30,8 +30,9 @@ showLogin = true;
       // this.registerSection.nativeElement.style.display = 'block';
       // this.loginSection.nativeElement.style.display = 'none';
       // this.registerSection.nativeElement.scrollIntoView({behavior: 'smooth'});
-    this.showReg = true;
-    this.toggleReg.emit(this.showReg);
+    // this.showReg = true;
+    // this.toggleReg.emit(this.showReg);
+    this.router.navigate(['/register']);
   }
 
   user: UserPost = {

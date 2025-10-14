@@ -63,3 +63,8 @@ app-header {
             object-fit: cover;
             /* margin-bottom: 10px; */
         }   
+
+        .profile-btn{
+            border-radius: 50%;
+            cursor: pointer;
+        }

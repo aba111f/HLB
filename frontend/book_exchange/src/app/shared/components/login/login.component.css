@@ -20,4 +20,5 @@ app-login {
         .form-footer a {
             color: var(--primary);
             text-decoration: none;
+            cursor: pointer;
         }
