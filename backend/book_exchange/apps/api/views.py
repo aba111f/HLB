@@ -12,7 +12,8 @@ from rest_framework.views import APIView
 from .models import Book, ExchangeRequest
 from .serializers import UserSerializer, BookSerializer, ExchangeRequestSerializer
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger('api')
+
 User = get_user_model()
 
 # --- Login view ---
