@@ -47,7 +47,9 @@ export class LoginComponent {
     if(this.user.email && this.user.password){
       this.auth_service.login_user_token_data(this.user).subscribe({
         next: (res) => {
-          if(res){this.router.navigate(['/profile']);}
+          if(res){this.router.navigate(['/profile']);
+            this.auth_service.logged();
+          }
           console.log('successfully logged in: ', res);
         },
         error: (err) => {

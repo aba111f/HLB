@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { UserData, UserPost } from '../../../shared/interface/interface';
-import { Observable, tap } from 'rxjs';
+import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { Token } from '../../../shared/interface/auth_model';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +11,9 @@ import { Token } from '../../../shared/interface/auth_model';
 export class AuthService {
   readonly apiUrl = 'http://127.0.0.1:8000/api';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient,
+              private router: Router
+  ) { this.check_auth_state(); }
 
 
   // REGISTER SECTION
@@ -52,4 +55,34 @@ export class AuthService {
   //   return this.http.post<UserData>(this.apiUrl + '/.../', user);
   // } 
   
+
+  private isAuthenticatedSubject = new BehaviorSubject<boolean>(false);
+    isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
+  
+    check_auth_state(){
+      if (typeof window !== 'undefined' && window.localStorage) {
+      const token = localStorage.getItem('access');
+      this.isAuthenticatedSubject.next(!!token);
+    } else {
+      this.isAuthenticatedSubject.next(false);
+    }
+    } 
+
+  logout(){
+    localStorage.removeItem('refresh');
+    localStorage.removeItem('access');
+    localStorage.removeItem('id');
+    localStorage.removeItem('image');
+    localStorage.removeItem('username');
+    localStorage.removeItem('email');
+    localStorage.removeItem('city');
+    this.router.navigate(['/']);
+    this.isAuthenticatedSubject.next(false);
+  }
+  logged(){
+    this.isAuthenticatedSubject.next(true);
+  }
+  is_logged_in(){
+    return this.isAuthenticatedSubject.value;
+  }
 }

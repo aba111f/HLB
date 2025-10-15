@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { SharingService } from '../../../core/services/sharing/sharing.service';
 import { Router } from '@angular/router';
+import { AuthService } from '../../../core/services/auth/auth.service';
 
 @Component({
   selector: 'app-profile', 
@@ -42,6 +43,7 @@ export class ProfileComponent implements OnInit {
 
   constructor(private profileService: ProfileService, 
               private shared_service: SharingService,
+              private auth_service: AuthService,
               private router: Router
   ) {
     // window.location.reload();
@@ -54,18 +56,36 @@ export class ProfileComponent implements OnInit {
   }
 
   loadUser() {
-    this.profileService.getCurrentUser().subscribe({
-      next: (data) => {
-        console.log(data);
-        this.user = data;
+    let username = localStorage.getItem('username');
+    let email = localStorage.getItem('email');
+    let city = localStorage.getItem('city');
+    let image  = localStorage.getItem('image');
+    if(!username && !email && !city && !image){
 
-        if (data.user_image) {
-          this.imagePreview = '' + data.user_image;
-          this.shared_service.set_image(this.imagePreview);
-        }
-      },
-      error: (err) => console.error('Error loading user:', err)
-    });
+      this.profileService.getCurrentUser().subscribe({
+        next: (data) => {
+          console.log(data);
+          this.user = data;
+
+          if (data.user_image) {
+            this.imagePreview = '' + data.user_image;
+            this.shared_service.set_image(this.imagePreview);
+          }
+          localStorage.setItem('username', data.username);
+          localStorage.setItem('email', data.email);
+          localStorage.setItem('city', data.city);
+          localStorage.setItem('image', this.imagePreview + '');
+        },
+        error: (err) => console.error('Error loading user:', err)
+      });
+    }
+    else{
+      this.user.username = username + '';
+      this.user.email = email + '';
+      this.user.city = city + '';
+      this.imagePreview = image;
+      
+    }
   }
 
   onImageSelected(event: any) {
@@ -88,8 +108,7 @@ export class ProfileComponent implements OnInit {
   quit(){
     let is = confirm('are you sure');
     if(is){
-      localStorage.clear()
-      this.router.navigate(['/']);
+      this.auth_service.logout();
     }
   }
 }
