@@ -7,10 +7,10 @@ router = DefaultRouter()
 router.register(r'users', UserViewSet, basename='user')
 router.register(r'books', BookViewSet, basename='book')
 router.register(r'exchange-requests', ExchangeRequestViewSet, basename='exchange-request')
+router.register(r'login', CustomLoginView, basename='custom-login')
 
 urlpatterns = [
     path('', include(router.urls)),  
-    path('login/', CustomLoginView.as_view(), name='custom_login'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 ]
 
