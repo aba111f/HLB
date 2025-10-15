@@ -20,10 +20,10 @@ export class LoginComponent {
               private router: Router
   ){}
 
-showReg = false;
-showLogin = true;
-@Output() toggleReg = new EventEmitter<boolean>();
-@Output() toggleLogin = new EventEmitter<boolean>();
+// showReg = false;
+// showLogin = true;
+// @Output() toggleReg = new EventEmitter<boolean>();
+// @Output() toggleLogin = new EventEmitter<boolean>();
 
 
   showRegister() {
@@ -53,9 +53,9 @@ showLogin = true;
           console.log('Error: ', err)
         }
       });
-      this.showLogin = false;
-      this.toggleLogin.emit(this.showLogin);
-      this.shared_service.check_auth_state(this.showLogin);
+      // this.showLogin = false;
+      // this.toggleLogin.emit(this.showLogin);
+      
       this.router.navigate(['/profile']);
     }
     else{

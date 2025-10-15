@@ -10,8 +10,9 @@ export class SharingService {
 
 
   constructor() {
+    this.check_auth_state();
+  }
 
-   }
 
     // Not neccessary info
   private show_login_btn = new BehaviorSubject<boolean>(true);
@@ -29,9 +30,13 @@ export class SharingService {
   private isAuthenticatedSubject = new BehaviorSubject<boolean>(false);
   isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
 
-  check_auth_state(value: boolean){
-    
-    this.isAuthenticatedSubject.next(value);
+  check_auth_state(){
+    if (typeof window !== 'undefined' && window.localStorage) {
+    const token = localStorage.getItem('access');
+    this.isAuthenticatedSubject.next(!!token);
+  } else {
+    this.isAuthenticatedSubject.next(false);
+  }
   } 
 
 
