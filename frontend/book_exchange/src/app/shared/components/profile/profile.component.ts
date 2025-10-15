@@ -4,6 +4,7 @@ import { ProfileService } from '../../../core/services/profile/profile.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { SharingService } from '../../../core/services/sharing/sharing.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-profile', 
@@ -40,10 +41,14 @@ export class ProfileComponent implements OnInit {
   imagePreview: string | ArrayBuffer | null = null;
 
   constructor(private profileService: ProfileService, 
-              private shared_service: SharingService
-  ) {}
+              private shared_service: SharingService,
+              private router: Router
+  ) {
+    // window.location.reload();
+  }
 
   ngOnInit(): void {
+    
     this.loadUser();
     
   }
@@ -78,5 +83,13 @@ export class ProfileComponent implements OnInit {
       next: () => alert('Profile updated successfully!'),
       error: (err) => console.error('Update failed:', err)
     });
+  }
+
+  quit(){
+    let is = confirm('are you sure');
+    if(is){
+      localStorage.clear()
+      this.router.navigate(['/']);
+    }
   }
 }
