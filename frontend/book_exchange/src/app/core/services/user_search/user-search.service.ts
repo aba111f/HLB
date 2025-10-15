@@ -1,21 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-
-export interface BookUser {
-  username: string;
-  city: string;
-  book_title: string;
-  genre: string;
-  exchange_type: string;
-  user_image?: string;
-}
-
+import { BookUser } from '../../../shared/interface/book-user';
 @Injectable({
   providedIn: 'root'
 })
 export class UserSearchService {
-  private apiUrl = 'http://localhost:8000/api/user-search/';
+  private apiUrl = 'http://localhost:8000/api/';
 
   constructor(private http: HttpClient) {}
 
@@ -29,6 +20,6 @@ export class UserSearchService {
     Object.entries(filters).forEach(([key, value]) => {
       if (value) params = params.set(key, value);
     });
-    return this.http.get<BookUser[]>(this.apiUrl, { params });
+    return this.http.post<BookUser[]>(this.apiUrl+'users/search_and_filter/', { params });
   }
 }

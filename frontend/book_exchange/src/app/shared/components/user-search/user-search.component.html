@@ -1,1 +1,29 @@
-<p>user-search works!</p>
+<div class="search-container">
+  <h2>Find Book Exchange Partners</h2>
+
+  <div class="filters">
+    <input [(ngModel)]="title" placeholder="Search by book title" />
+    <input [(ngModel)]="city" placeholder="City" />
+    <input [(ngModel)]="genre" placeholder="Genre" />
+
+    <select [(ngModel)]="exchange_type">
+      <option value="">All types</option>
+      <option *ngFor="let type of exchangeOptions" [value]="type">{{ type }}</option>
+    </select>
+
+    <button (click)="search()">Search</button>
+  </div>
+
+  <div class="results">
+    <div *ngFor="let user of users" class="user-card">
+      <img *ngIf="user.user_image" [src]="user.user_image" alt="User Image" />
+      <div>
+        <h3>{{ user.username }}</h3>
+        <p><b>City:</b> {{ user.city }}</p>
+        <p><b>Book:</b> {{ user.book_title }}</p>
+        <p><b>Genre:</b> {{ user.genre }}</p>
+        <p><b>Type:</b> {{ user.exchange_type }}</p>
+      </div>
+    </div>
+  </div>
+</div>

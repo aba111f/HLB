@@ -3,6 +3,7 @@ import { ProfileComponent } from './shared/components/profile/profile.component'
 import { HomepageComponent } from './shared/components/homepage/homepage.component';
 import { RegisterComponent } from './shared/components/register/register.component';
 import { LoginComponent } from './shared/components/login/login.component';
+import { UserSearchComponent } from './shared/components/user-search/user-search.component';
 
 export const routes: Routes = [
     {
@@ -20,6 +21,10 @@ export const routes: Routes = [
     {
         path:'login',
         component: LoginComponent
+    },
+    {
+        path:'user-search', 
+        component: UserSearchComponent 
     }
 
 ];

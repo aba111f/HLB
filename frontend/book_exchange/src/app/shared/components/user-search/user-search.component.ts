@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
-import { UserSearchService,BookUser } from '../../../core/services/user_search/user-search.service';
-
+import { UserSearchService } from '../../../core/services/user_search/user-search.service';
+import { BookUser } from '../../interface/book-user';
+import { FormsModule } from '@angular/forms';
 @Component({
+  imports: [FormsModule],
   selector: 'app-user-search',
   templateUrl: './user-search.component.html',
   styleUrls: ['./user-search.component.css']
