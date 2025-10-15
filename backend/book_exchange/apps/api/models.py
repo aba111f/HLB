@@ -32,7 +32,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(max_length=50, unique=True)
     date_joined = models.DateTimeField(auto_now_add=True)
     city = models.CharField(max_length=100, blank=True, null=True)
-    user_image = models.ImageField(default='user.png', upload_to='user_images/', blank=True)
+    user_image = models.ImageField(default='user_images/user.png', upload_to='user_images/', blank=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
