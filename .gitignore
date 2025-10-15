@@ -1,2 +1,3 @@
-/backend/book_exchange/logs
+/backend/book_exchange/logs/
+/backend/book_exchange/logs/app.log
 /backend/book_exchange/__pycache__
