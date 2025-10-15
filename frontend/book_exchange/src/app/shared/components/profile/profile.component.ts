@@ -111,4 +111,27 @@ export class ProfileComponent implements OnInit {
       this.auth_service.logout();
     }
   }
+
+  delete(){
+    let id = localStorage.getItem('id');
+    let email = localStorage.getItem('email');
+    let password = localStorage.getItem('password');
+    let is = confirm('are you sure');
+    if(is){
+      if(id && email && password){
+        this.auth_service.delete(id, {email, password}).subscribe({
+          next: (res) => {
+            window.alert('success: ' + res);
+            this.auth_service.logout();
+          },
+          error: (err) => {
+            window.alert('error: ' + err);
+          }
+        });
+      }
+      else{
+        window.alert('id is null');
+      }
+    }
+  }
 }

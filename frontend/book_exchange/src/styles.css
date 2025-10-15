@@ -5,6 +5,10 @@
             box-sizing: border-box;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
+html, body {
+  height: 100%;
+
+}
 
         :root {
             --primary: #4a6fa5;
@@ -21,6 +25,7 @@
             background-color: #f5f7fa;
             color: var(--dark);
             line-height: 1.6;
+       
         }
 
         .container {
@@ -107,3 +112,24 @@
             max-width: 600px;
             margin: 0 auto;
         }
+
+
+app-root {
+  min-height: 100vh; 
+  display: flex;
+  flex-direction: column;
+}
+
+main, router-outlet {
+  flex: 1; 
+  display: block;
+}
+
+header {
+  flex-shrink: 0;
+}
+
+footer {
+  flex-shrink: 0;
+  margin-top: auto;
+}

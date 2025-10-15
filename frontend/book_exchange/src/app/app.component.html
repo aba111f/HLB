@@ -13,11 +13,18 @@
 <app-register *ngIf="this.showReg" (toggleLogin)="onToggleLogin($event)"></app-register>
 <app-footer></app-footer>
 -->
+<header>
+    <app-header></app-header>
+</header>
 
-<app-header></app-header>
+<main>
 <router-outlet></router-outlet> 
+</main>
+
 
 
 <!-- <app-login *ngIf="this.showLogin" (toggleReg)="onToggleReg($event)" (toggleLogin)="LoginDisable($event)"></app-login>
 <app-register *ngIf="this.showReg" (toggleLogin)="onToggleLogin($event)"></app-register> -->
-<app-footer></app-footer>
+<footer>
+    <app-footer></app-footer>
+</footer>

@@ -81,7 +81,7 @@ class UserViewSet(viewsets.ModelViewSet):
         instance = get_object_or_404(User, pk=uuid)
         self.perform_destroy(instance)
         logger.info(f"User deleted: {instance.email}")
-        return Response(status=204)
+        return Response({f"User deleted: {instance.email}"}, status=200)
 
     def list(self, request, *args, **kwargs):
         users = self.get_queryset()

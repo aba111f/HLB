@@ -76,6 +76,7 @@ export class AuthService {
     localStorage.removeItem('username');
     localStorage.removeItem('email');
     localStorage.removeItem('city');
+    localStorage.removeItem('password');
     this.router.navigate(['/']);
     this.isAuthenticatedSubject.next(false);
   }
@@ -84,5 +85,12 @@ export class AuthService {
   }
   is_logged_in(){
     return this.isAuthenticatedSubject.value;
+  }
+
+  delete(id: string, user_data: {
+    email: string,
+    password: string
+  }): Observable<string>{
+    return this.http.delete<string>(this.apiUrl + `/users/${id}/`, { body: user_data });
   }
 }

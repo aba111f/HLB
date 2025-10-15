@@ -49,6 +49,7 @@ export class LoginComponent {
         next: (res) => {
           if(res){this.router.navigate(['/profile']);
             this.auth_service.logged();
+            localStorage.setItem('password', this.user.password);
           }
           console.log('successfully logged in: ', res);
         },

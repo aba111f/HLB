@@ -2,8 +2,10 @@ import { Component } from '@angular/core';
 import { UserSearchService } from '../../../core/services/user_search/user-search.service';
 import { BookUser } from '../../interface/book-user';
 import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+
 @Component({
-  imports: [FormsModule],
+  imports: [FormsModule, CommonModule],
   selector: 'app-user-search',
   templateUrl: './user-search.component.html',
   styleUrls: ['./user-search.component.css']
