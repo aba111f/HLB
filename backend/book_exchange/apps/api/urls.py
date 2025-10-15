@@ -28,7 +28,7 @@ urlpatterns = [
 
 # DELETE /api/users/{id}/ → удалить
 
-# POST /api/users/filter/ → фильтр по городам и книгам (в теле массивы cities и books)
+# POST /api/users/search_and_filter/ → фильтр по городам и книгам (в теле массивы cities и books)
 
 
 
