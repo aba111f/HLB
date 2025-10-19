@@ -16,17 +16,20 @@
 
   <div class="results">
     <div *ngFor="let user of users" class="user-card">
-      <img *ngIf="user.book_image" [src]="book_image_preview" alt="User Image" />
+      <img class="user_image" *ngIf="user.user_image" [src]="" alt="User Image" />
+      
       <div>
-        <h3>{{ user.username }}</h3>
-        <p><b>mail:</b> {{ user.email }}</p>
-        <p><b>Book:</b> {{ user.title }}</p>
+        <h5>{{ user.username }} has</h5>
+        <img class="book_image" *ngIf="user.book_image" [src]="'http://localhost:8000' + user.book_image" alt="">
+        <h3><b>Book:</b> {{ user.title }} </h3>
+        <!-- <p><b>mail:</b> {{ user.email }}</p> -->
+        
         <p><b>Author:</b> {{ user.author }}</p>
         <p><b>Genre:</b> {{ user.genre }}</p>
-        <p><b>Type:</b> {{ user.exchange_type }}</p>
+        <p><b>Type:</b> {{ user.availability }}</p>
         <p><b>Condition:</b> {{ user.condition }}</p>
-        <p><b>Description:</b> {{ user.description }}</p>
-        <p><b>Created at: </b> {{ user.created_at }}</p>
+        <!-- <p><b>Description:</b> {{ user.description }}</p> -->
+        <p><b>Created at: </b> {{ user.created_at | date:'short'}}</p>
       </div>
     </div>
   </div>

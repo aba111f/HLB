@@ -34,10 +34,7 @@ export class UserSearchComponent {
         if(data){
           console.log(data);
         }
-        if(this.users[0].book_image){
-          console.log(this.users[0].book_image);
-          this.book_image_preview = 'http://localhost:8000' + this.users[0].book_image;
-        }
+        
 
       },
       error: err => console.error(err)
