@@ -71,5 +71,8 @@ export class HeaderComponent implements OnInit{
     this.router.navigate(['/profile']);
   } 
 
+  go_search(){
+    this.router.navigate(['/user-search']);
+  }
 
 }
