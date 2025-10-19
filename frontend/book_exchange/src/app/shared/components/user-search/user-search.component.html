@@ -2,11 +2,11 @@
   <h2>Find Book Exchange Partners</h2>
 
   <div class="filters">
-    <input [(ngModel)]="title" placeholder="Search by book title" />
-    <input [(ngModel)]="city" placeholder="City" />
-    <input [(ngModel)]="genre" placeholder="Genre" />
+    <input [(ngModel)]="title" placeholder="Search by book title" name="title"/>
+    <input [(ngModel)]="author" placeholder="Author" name="author" />
+    <input [(ngModel)]="genre" placeholder="Genre" name="genre"/>
 
-    <select [(ngModel)]="exchange_type">
+    <select [(ngModel)]="exchange_type" name="exchange_type">
       <option value="">All types</option>
       <option *ngFor="let type of exchangeOptions" [value]="type">{{ type }}</option>
     </select>
@@ -16,13 +16,17 @@
 
   <div class="results">
     <div *ngFor="let user of users" class="user-card">
-      <img *ngIf="user.user_image" [src]="user.user_image" alt="User Image" />
+      <img *ngIf="user.book_image" [src]="book_image_preview" alt="User Image" />
       <div>
         <h3>{{ user.username }}</h3>
-        <p><b>City:</b> {{ user.city }}</p>
-        <p><b>Book:</b> {{ user.book_title }}</p>
+        <p><b>mail:</b> {{ user.email }}</p>
+        <p><b>Book:</b> {{ user.title }}</p>
+        <p><b>Author:</b> {{ user.author }}</p>
         <p><b>Genre:</b> {{ user.genre }}</p>
         <p><b>Type:</b> {{ user.exchange_type }}</p>
+        <p><b>Condition:</b> {{ user.condition }}</p>
+        <p><b>Description:</b> {{ user.description }}</p>
+        <p><b>Created at: </b> {{ user.created_at }}</p>
       </div>
     </div>
   </div>

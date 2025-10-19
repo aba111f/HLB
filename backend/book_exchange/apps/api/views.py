@@ -183,6 +183,7 @@ def search_books(request):
         title = request.POST.get('title')
         author = request.POST.get('author')
         genre = request.POST.get('genre')
+        availability = request.POST.get('availability')
 
         search = BookDocument.search()
 
@@ -192,15 +193,23 @@ def search_books(request):
             search = search.query('match', author={'query': author, 'fuzziness': "AUTO"})
         if genre:
             search = search.query('match', genre={'query': genre, 'fuzziness': "AUTO"})
+        if availability:
+            search = search.query('match', availability={'query': availability, 'fuzziness': "AUTO"})
+
         response = search.execute()
-        print(response)
-        for res in response: 
-            print(res.owner_username)
+        
         results = [ 
             {
                 'title': hit.title,
                 'author': hit.author,
                 'genre': hit.genre,
+                'username': hit.owner_username,
+                'email': hit.owner_email,
+                'condition': hit.condition,
+                'description': hit.description,
+                'availability': hit.availability,
+                'created_at': hit.created_at,
+                'book_image': hit.book_image
 
             }
             for hit in response

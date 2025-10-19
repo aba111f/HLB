@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { UserSearchService } from '../../../core/services/user_search/user-search.service';
-import { BookUser } from '../../interface/book-user';
+import { BookUser, Result } from '../../interface/book-user';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
@@ -13,10 +13,10 @@ import { CommonModule } from '@angular/common';
 export class UserSearchComponent {
   users: BookUser[] = [];
   title = '';
-  city = '';
+  author = '';
   genre = '';
   exchange_type = '';
-
+  book_image_preview: string = '';
   exchangeOptions = ['Exchange', 'Lend', 'Giveaway'];
 
   constructor(private userSearchService: UserSearchService) {}
@@ -24,13 +24,22 @@ export class UserSearchComponent {
   search() {
     const filters = {
       title: this.title,
-      city: this.city,
-      genre: this.genre,
-      exchange_type: this.exchange_type
+      author: this.author,
+      genre: this.genre
     };
 
     this.userSearchService.searchUsers(filters).subscribe({
-      next: data => this.users = data,
+      next: data => {
+        this.users = data.results;
+        if(data){
+          console.log(data);
+        }
+        if(this.users[0].book_image){
+          console.log(this.users[0].book_image);
+          this.book_image_preview = 'http://localhost:8000' + this.users[0].book_image;
+        }
+
+      },
       error: err => console.error(err)
     });
   }

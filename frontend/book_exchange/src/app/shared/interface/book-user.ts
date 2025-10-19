@@ -2,12 +2,23 @@ import { UserGet } from "./interface";
 
 
 export interface BookUser {
-  username: string;
-  city: string;
-  book_title: string;
+  username?: string;
+  email?: string;
+  city?: string;
+  title: string;
   genre: string;
-  exchange_type: string;
+  exchange_type?: string;
   user_image?: File | null;
+  created_at?: Date;
+  description?: string;
+  book_image?: File | null;
+  condition?: string;
+  availability?: string;
+  author: string;
+
+}
+export interface Result {
+  results: BookUser[];
 }
 
 export interface Book{

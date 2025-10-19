@@ -59,7 +59,7 @@ class Book(models.Model):
     author = models.CharField(max_length=255, db_index=True)
     genre = models.CharField(max_length=100, db_index=True)
     description = models.TextField(blank=True, null=True)
-    book_image = models.ImageField(default='template.png', upload_to='book_images/')
+    book_image = models.ImageField(default='book_images/template.png', upload_to='book_images/')
     condition = models.CharField(max_length=50, choices=[
         ('new', 'New'),
         ('good', 'Good'),
