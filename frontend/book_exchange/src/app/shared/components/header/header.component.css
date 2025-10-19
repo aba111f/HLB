@@ -7,6 +7,10 @@ app-header {
             z-index: 100;
         }
 
+        a{
+            cursor: pointer;
+        }
+
         .navbar {
             display: flex;
             justify-content: space-between;
