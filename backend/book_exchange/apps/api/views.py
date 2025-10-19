@@ -1,5 +1,6 @@
 import logging
 from django.contrib.auth import authenticate
+from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from rest_framework import viewsets, status
 from rest_framework.response import Response
@@ -9,6 +10,10 @@ from rest_framework.exceptions import ValidationError
 from rest_framework_simplejwt.tokens import RefreshToken
 from .models import User, Book, ExchangeRequest
 from .serializers import UserSerializer, BookSerializer, ExchangeRequestSerializer
+
+from django.views.decorators.csrf import csrf_exempt
+from django_elasticsearch_dsl.search import Search
+from apps.api.documents import BookDocument
 
 logger = logging.getLogger(__name__)
 
@@ -166,3 +171,41 @@ class ExchangeRequestViewSet(viewsets.ModelViewSet):
         exchange_request.save()
         logger.info(f"Exchange request rejected by {request.user.email}")
         return Response({"status": "rejected"})
+    
+
+
+# SEARCHING OF BOOKS
+
+@csrf_exempt
+def search_books(request):
+    
+    if request.method == 'POST':
+        title = request.POST.get('title')
+        author = request.POST.get('author')
+        genre = request.POST.get('genre')
+
+        search = BookDocument.search()
+
+        if title:
+            search = search.query('match', title={'query': title, 'fuzziness': 'AUTO'})
+        if author: 
+            search = search.query('match', author={'query': author, 'fuzziness': "AUTO"})
+        if genre:
+            search = search.query('match', genre={'query': genre, 'fuzziness': "AUTO"})
+        response = search.execute()
+        print(response)
+        for res in response: 
+            print(res.owner_username)
+        results = [ 
+            {
+                'title': hit.title,
+                'author': hit.author,
+                'genre': hit.genre,
+
+            }
+            for hit in response
+        ]
+        return JsonResponse({'results': results}, status=200)
+    return JsonResponse({'error': 'Only POST method allowed'}, status=405)
+
+

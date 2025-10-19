@@ -1,7 +1,7 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from rest_framework_simplejwt.views import TokenRefreshView
-from .views import UserViewSet, BookViewSet, ExchangeRequestViewSet,CustomLoginView
+from .views import UserViewSet, BookViewSet, ExchangeRequestViewSet,CustomLoginView, search_books
 
 router = DefaultRouter()                
 router.register(r'users', UserViewSet, basename='user')
@@ -12,6 +12,7 @@ router.register(r'login', CustomLoginView, basename='custom-login')
 urlpatterns = [
     path('', include(router.urls)),  
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('search/', search_books)
 ]
 
 # Подсказочки :)  (крч /help)
@@ -36,6 +37,8 @@ urlpatterns = [
 # <--!! Книги !!-->
 
 # POST /api/books/ → добавить книгу
+
+# POST /api/search/ -> search kniga
 
 # GET /api/books/ → список всех книг
 
