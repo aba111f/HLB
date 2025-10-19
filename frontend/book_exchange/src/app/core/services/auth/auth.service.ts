@@ -57,9 +57,9 @@ export class AuthService {
   
 
   private isAuthenticatedSubject = new BehaviorSubject<boolean>(false);
-    isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
+  isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
   
-    check_auth_state(){
+  private check_auth_state(){
       if (typeof window !== 'undefined' && window.localStorage) {
       const token = localStorage.getItem('access');
       this.isAuthenticatedSubject.next(!!token);

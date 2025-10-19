@@ -16,22 +16,17 @@ export class RegisterComponent {
 @ViewChild('loginSection') loginSection!: ElementRef;
 
 showLoginBool = false;
-@Output() toggleLogin = new EventEmitter<boolean>();
+
 
 
   constructor(private auth_service: AuthService,
               private router: Router
   ){
-    console.log(this.auth_service);
+
   }
 
   showLogin() {
-    // this.loginSection.nativeElement.style.display = 'block';
-    // this.registerSection.nativeElement.style.display = 'none';
-    // this.loginSection.nativeElement.scrollIntoView({behavior: 'smooth'});
 
-    // this.showLoginBool = true;
-    // this.toggleLogin.emit(this.showLoginBool);
     this.router.navigate(['/login']);
             
   }
@@ -64,13 +59,14 @@ showLoginBool = false;
     if (this.user.username && this.user.email && this.user.city && this.user.password && this.user.user_image){
       this.auth_service.register_user(this.user).subscribe({
         next: (res) => {
-          console.log('user registered: ', res);
+          window.alert('user registered successfully: ' + res);
+          this.router.navigate(['/login']);
         },
         error: (err) => {
           console.log('error: ', err);
         }
       }); 
-      console.log('registered');
+      
       this.user.username = "";
       this.user.email = "";
       this.user.city = "";
@@ -78,8 +74,6 @@ showLoginBool = false;
       this.user.user_image = null;
       this.confirmPassword = "";
       this.previewUrl = null;
-      this.showLoginBool = true;
-      this.toggleLogin.emit(this.showLoginBool);
     }
     else{
       window.alert('something went wrong, the some data is empty');

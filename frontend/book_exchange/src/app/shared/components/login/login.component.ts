@@ -54,7 +54,7 @@ export class LoginComponent {
           console.log('successfully logged in: ', res);
         },
         error: (err) => {
-          console.log('Error: ', err)
+          console.log('Error: ', err);
         }
       });
       // this.showLogin = false;
