@@ -177,6 +177,7 @@ class ExchangeRequestViewSet(viewsets.ModelViewSet):
 # SEARCHING OF BOOKS
 
 @csrf_exempt
+@action(detail=False, methods=['post'], permission_classes=[AllowAny])
 def search_books(request):
     
     if request.method == 'POST':
