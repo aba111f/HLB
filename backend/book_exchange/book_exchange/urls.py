@@ -23,7 +23,11 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/',include('apps.api.urls'))
+    # path('api/',include('apps.api.urls'))
+    path('users/', include('apps.users.urls')),
+    path('books/', include('apps.books.urls')),
+    path('exchange-requests/', include('apps.exchange_requests.urls')),
+    path('common/', include('apps.common.urls')),
 ]
 
 if settings.DEBUG:

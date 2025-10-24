@@ -56,10 +56,14 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'apps.api',
+    # 'apps.api',
     'rest_framework_simplejwt',
     'corsheaders',
-    'django_elasticsearch_dsl'
+    'django_elasticsearch_dsl',
+    'apps.users',
+    'apps.books',
+    'apps.exchange_requests',
+    'apps.common'
     # 'logging'
 ]
 
