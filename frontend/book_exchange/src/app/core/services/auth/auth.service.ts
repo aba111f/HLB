@@ -30,7 +30,7 @@ export class AuthService {
     else{
       console.log('image not sent');
     }
-    return this.http.post(this.apiUrl + 'users/users/', formData);
+    return this.http.post(this.apiUrl + 'users/', formData);
   }
   username: string = '';
   
@@ -91,6 +91,6 @@ export class AuthService {
     email: string,
     password: string
   }): Observable<string>{
-    return this.http.delete<string>(this.apiUrl + `/users/${id}/`, { body: user_data });
+    return this.http.delete<string>(this.apiUrl + `users/${id}/`, { body: user_data });
   }
 }

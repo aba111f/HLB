@@ -6,7 +6,7 @@ import { BookUser, Result } from '../../../shared/interface/book-user';
   providedIn: 'root'
 })
 export class UserSearchService {
-  private apiUrl = 'http://localhost:8000/api/';
+  private apiUrl = 'http://localhost:8000/common/';
 
   constructor(private http: HttpClient) {}
   
