@@ -104,12 +104,12 @@ WSGI_APPLICATION = 'book_exchange.wsgi.application'
 
 
 
-ENV_Path = BASE_DIR.parents[2] / '.env'
+ENV_Path = BASE_DIR.parents[3] / '.env'
 # print(ENV_Path)
 load_dotenv(dotenv_path=ENV_Path)
 
 tmpPostgres = urlparse(os.getenv("DATABASE_URL"))
-# print(BASE_DIR.parent.parent.parent)
+print(BASE_DIR.parent.parent.parent)
 port = os.getenv("DB_PORT")
 
 DATABASES = {
