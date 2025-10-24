@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
   providedIn: 'root'
 })
 export class AuthService {
-  readonly apiUrl = 'http://127.0.0.1:8000/api';
+  readonly apiUrl = 'http://127.0.0.1:8000/';
 
   constructor(private http: HttpClient,
               private router: Router
@@ -30,7 +30,7 @@ export class AuthService {
     else{
       console.log('image not sent');
     }
-    return this.http.post(this.apiUrl + '/users/', formData);
+    return this.http.post(this.apiUrl + 'users/users/', formData);
   }
   username: string = '';
   
@@ -41,7 +41,7 @@ export class AuthService {
     formData.append('password', user.password);
 
 
-    return this.http.post<Token>(this.apiUrl + '/login/', formData)
+    return this.http.post<Token>(this.apiUrl + 'common/login/', formData)
       .pipe(tap((token: Token) =>{
           localStorage.setItem("access", token.access);
           localStorage.setItem("refresh", token.refresh);

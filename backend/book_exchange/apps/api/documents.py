@@ -1,7 +1,8 @@
 from django_elasticsearch_dsl import Document, fields
 from django_elasticsearch_dsl.registries import registry 
 
-from .models import Book, User
+from apps.users.models import User
+from apps.books.models import Book
 
 @registry.register_document
 class BookDocument(Document):

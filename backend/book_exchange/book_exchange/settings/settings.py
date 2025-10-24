@@ -26,7 +26,7 @@ SIMPLE_JWT = {
 coloredlogs.install(level='DEBUG', logger=logging.getLogger('api'))
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 
 
@@ -108,12 +108,12 @@ WSGI_APPLICATION = 'book_exchange.wsgi.application'
 
 
 
-ENV_Path = BASE_DIR.parents[3] / '.env'
+ENV_Path = BASE_DIR.parents[2] / '.env'
 # print(ENV_Path)
 load_dotenv(dotenv_path=ENV_Path)
 
 tmpPostgres = urlparse(os.getenv("DATABASE_URL"))
-print(BASE_DIR.parent.parent.parent)
+# print(BASE_DIR.parent.parent.parent)
 port = os.getenv("DB_PORT")
 
 DATABASES = {
@@ -176,7 +176,7 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-AUTH_USER_MODEL = "api.User"
+AUTH_USER_MODEL = "users.User"
 
 LOGGING = {
     'version': 1,

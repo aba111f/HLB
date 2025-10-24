@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from .models import ExchangeRequest, Deal, Review
-from users.serializers import UserSerializer
-from books.serializers import BookSerializer
+from apps.users.serializers import UserSerializer
+from apps.books.serializers import BookSerializer
 
 class ExchangeRequestSerializer(serializers.ModelSerializer):
     from_user = UserSerializer(read_only=True)

@@ -3,4 +3,4 @@ from django.apps import AppConfig
 
 class ExchangeRequestsConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'exchange_requests'
+    name = 'apps.exchange_requests'

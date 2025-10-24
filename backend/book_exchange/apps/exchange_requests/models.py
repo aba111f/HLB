@@ -1,7 +1,7 @@
 import uuid
 from django.db import models
-from users.models import User
-from books.models import Book
+from apps.users.models import User
+from apps.books.models import Book
 
 class ExchangeRequest(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)

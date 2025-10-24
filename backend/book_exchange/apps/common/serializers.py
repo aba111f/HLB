@@ -1,3 +1,3 @@
-from users.serializers import UserSerializer
-from books.serializers import BookSerializer
-from exchange_requests.serializers import ExchangeRequestSerializer
+from apps.users.serializers import UserSerializer
+from apps.books.serializers import BookSerializer
+from apps.exchange_requests.serializers import ExchangeRequestSerializer

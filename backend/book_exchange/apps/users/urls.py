@@ -10,14 +10,14 @@ urlpatterns = [
     path('', include(router.urls)),  
 ]
 
-# POST /api/users/ → создать пользователя
+# POST /users/users/ → создать пользователя
 
-# GET /api/users/ → список пользователей
+# GET /users/users/ → список пользователей
 
-# GET /api/users/{id}/ → данные конкретного пользователя
+# GET /users/users/{id}/ → данные конкретного пользователя
 
-# PUT /api/users/{id}/ → обновить
+# PUT /users/users/{id}/ → обновить
 
-# DELETE /api/users/{id}/ → удалить
+# DELETE /users/users/{id}/ → удалить
 
-# POST /api/users/search_and_filter/ → фильтр по городам и книгам (в теле массивы cities и books)
+# POST /users/users/search_and_filter/ → фильтр по городам и книгам (в теле массивы cities и books)

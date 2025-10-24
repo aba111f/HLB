@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import Book
-from users.serializers import UserSerializer
+from apps.users.serializers import UserSerializer
 
 class BookSerializer(serializers.ModelSerializer):
     owner = UserSerializer(read_only=True)
