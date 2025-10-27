@@ -1,0 +1,34 @@
+<div class="exchange-container">
+  <h2>📚 Create Exchange Request</h2>
+
+  <form [formGroup]="exchangeForm" (ngSubmit)="onSubmit()">
+    <label>To Email</label>
+    <input formControlName="to_email" type="email" placeholder="Enter recipient email">
+
+    <label>Requested Book ID</label>
+    <input formControlName="requested_book_id" type="text" placeholder="Enter requested book ID">
+
+    <label>Offered Book ID</label>
+    <input formControlName="offered_book_id" type="text" placeholder="(Optional) Enter offered book ID">
+
+    <label>Exchange Type</label>
+    <input formControlName="exchange_type" type="text" placeholder="(Optional) Type">
+
+    <label>Message</label>
+    <textarea formControlName="message" placeholder="Write a message (optional)"></textarea>
+
+    <button type="submit" [disabled]="exchangeForm.invalid">Send Request</button>
+  </form>
+
+  <div class="message success" *ngIf="successMessage">{{ successMessage }}</div>
+  <div class="message error" *ngIf="errorMessage">{{ errorMessage }}</div>
+
+  <h3>📩 Your Exchange Requests</h3>
+  <ul>
+    <li *ngFor="let req of exchangeRequests">
+      <strong>To:</strong> {{ req.to_user?.email || req.to_email }}<br>
+      <strong>Requested Book:</strong> {{ req.requested_book?.title || req.requested_book_id }}<br>
+      <strong>Status:</strong> {{ req.status || 'Pending' }}
+    </li>
+  </ul>
+</div>
