@@ -6,9 +6,8 @@ import { Inject } from '@angular/core';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   
-  const service = Inject(SharingService);
-  const access = service.get_from_storage('access');
-
+  // const access = Inject(SharingService).get_from_storage('access');
+  const access = localStorage.getItem('access');
 
   if (req.url.includes('/common/login/') || req.url.includes('common/refresh/')) {
     return next(req);
