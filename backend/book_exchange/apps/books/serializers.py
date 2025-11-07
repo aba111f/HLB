@@ -17,5 +17,6 @@ class BookSerializer(serializers.ModelSerializer):
             "condition",
             "availability",
             "created_at",
+            "book_image"
         ]
         read_only_fields = ["id", "created_at", "owner"]

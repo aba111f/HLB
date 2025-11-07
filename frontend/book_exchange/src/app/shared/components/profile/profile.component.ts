@@ -4,12 +4,12 @@ import { ProfileService } from '../../../core/services/profile/profile.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { SharingService } from '../../../core/services/sharing/sharing.service';
-import { Router } from '@angular/router';
+import { Router, RouterLinkWithHref } from '@angular/router';
 import { AuthService } from '../../../core/services/auth/auth.service';
 
 @Component({
   selector: 'app-profile', 
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule, RouterLinkWithHref],
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css']
 })

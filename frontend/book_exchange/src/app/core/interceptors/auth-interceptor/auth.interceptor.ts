@@ -1,11 +1,16 @@
 import { HttpInterceptorFn, HttpRequest } from '@angular/common/http';
 import { catchError, throwError } from 'rxjs';
+import { SharingService } from '../../services/sharing/sharing.service';
+import { Inject } from '@angular/core';
+
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
-  const access = localStorage.getItem('access');
+  
+  const service = Inject(SharingService);
+  const access = service.get_from_storage('access');
 
 
-  if (req.url.includes('/api/login/') || req.url.includes('api/refresh/')) {
+  if (req.url.includes('/common/login/') || req.url.includes('common/refresh/')) {
     return next(req);
   }
 

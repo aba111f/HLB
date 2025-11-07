@@ -23,7 +23,12 @@ export class SharingService {
   }
 
 
-
+  get_from_storage(data: string){
+    if (typeof window !== 'undefined' && window.localStorage) {
+      return localStorage.getItem(data);
+    }
+    return null
+  }
 
 
     // Auth Check
@@ -35,9 +40,9 @@ export class SharingService {
 
   set_image(value: string){
     this.imageSubject.next(value);
-    if (typeof window !== 'undefined' && window.localStorage) {
-      localStorage.setItem('image', value);
-    }
+
+    localStorage.setItem('image', value);
+
     
   }
 }

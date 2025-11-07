@@ -1,0 +1,30 @@
+.results {
+  /* display: flex; */
+  /* flex-wrap: wrap; */
+  justify-content: center;
+  gap: 15px;
+}
+.container1{
+    display: flex;
+}
+
+.book_card {
+  display: flex;
+  justify-items: center;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 10px;
+  width: 360px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+.book_image{
+    justify-items: center;
+    width: 150px;
+    align-items: center;
+    margin-left: 90px;
+}
+
+
+/* .book_image{
+  width: 100px;
+} */

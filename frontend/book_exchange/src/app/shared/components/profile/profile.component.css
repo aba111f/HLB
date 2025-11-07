@@ -1,15 +1,19 @@
 .profile-container {
-  max-width: 600px;
+  max-width: 1000px;
   margin: 40px auto;
   padding: 25px;
   border-radius: 15px;
   background: #f8f9fa;
   box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  display: flex;
 }
 
 h2 {
   text-align: center;
   margin-bottom: 20px;
+}
+.first-container{
+  width: 600px;
 }
 
 .profile-card {
@@ -76,4 +80,8 @@ button {
 
 button:hover {
   background-color: #0056b3;
+}
+
+.books{
+  width: 400px;
 }

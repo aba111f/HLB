@@ -19,6 +19,17 @@ class BookViewSet(viewsets.ModelViewSet):
         serializer.save(owner=self.request.user)
         logger.info(f"Book created by {self.request.user.email}: {serializer.data['title']}")
 
+    @action(detail=False, methods=['get'], permission_classes=[IsAuthenticated])
+    def get_book_by_user(self, request):
+        
+        owner = request.user
+        
+        books = self.queryset.filter(owner = owner)
+        serializer = self.get_serializer(books, many=True)
+        print(serializer.data)
+        return Response(serializer.data)
+    
+
     @action(detail=False, methods=["get"])
     def search_books(self, request):
         query = request.query_params.get("q")

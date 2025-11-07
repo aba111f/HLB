@@ -1,0 +1,85 @@
+
+<div class="container1">
+    <h3>My Books:</h3>
+
+
+    <div class="results">
+    <div *ngFor="let book of books" class="book-card">
+        <img class="book_image" *ngIf="book.book_image" [src]="book.book_image" alt="">
+        <h3><b>Book:</b> {{ book.title }} </h3>
+        
+        
+        <p><b>Author:</b> {{ book.author }}</p>
+        <p><b>Genre:</b> {{ book.genre }}</p>
+        <p><b>Type:</b> {{ book.availability }}</p>
+        <p><b>Condition:</b> {{ book.condition }}</p>
+
+        <p><b>Created at: </b> {{ book.created_at | date:'short'}}</p>
+      
+    </div>
+  </div>
+</div>
+
+
+ <section class="section">
+                <div class="container">
+                    <div class="form-container">
+                        <h2 style="text-align: center; margin-bottom: 30px; color: var(--primary);">Upload the book</h2>
+                        <form (ngSubmit)="onsubmit()" #bookForm="ngForm">
+                            <div class="form-group">
+                                <label for="title">title</label>
+                                <input type="text" id="title" class="form-control" placeholder="Enter title of the Book" [(ngModel)]="book.title" name="title" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="author">Author</label>
+                                <input type="text" id="author" class="form-control" placeholder="Enter author of the Book" [(ngModel)]="book.author" name="author" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="genre">Genre</label>
+                                <input type="text" id="genre" class="form-control" placeholder="Enter Genre of the Book" [(ngModel)]="book.genre" name="genre" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="description">Description</label>
+                                <input type="text" id="description" class="form-control" placeholder="Enter Description" [(ngModel)]="book.description" name="description" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="condition">Condition</label>
+                                <select id="condition" class='form-control' name="condition" [(ngModel)]="book.condition" required>
+                                    <option value="no" disabled selected>Choose your Condition</option>
+                                    <option value="new">New</option>
+                                    <option value="good">Good</option>
+                                    <option value="used">Used</option>
+                                    
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="availability">Availability</label>
+                                <select id="availability" class='form-control' name="availability" [(ngModel)]="book.availability" required>
+                                    <option value="no1" disabled selected>Choose your Availability</option>
+                                    <option value="exchange">Exchange</option>
+                                    <option value="lend">Lend</option>
+                                    <option value="giveaway">Giveaway</option>
+                                    
+                                </select>
+                            </div>
+
+                            
+                            <div class="form-group">
+                                <label for="book-image">Image</label>
+                                <input type="file" class="form-control" placeholder="load your image" id="book-image" name="image"
+                                    (change)="onFileSelected($event)" accept="image/*"
+                                >
+                            </div>
+                            <div *ngIf="previewUrl" class="image-preview">
+                                <p style="margin-top:10px;">Preview:</p>
+                                <img [src]="previewUrl" alt="Book Image" style="max-width: 150px; border-radius: 10px;">
+                            </div>
+
+
+                            <button type="submit" class="btn btn-primary" style="width: 100%;" [disabled]="bookForm.invalid">Create</button>
+                            
+                        </form>
+                    </div>
+                </div>
+            </section>
