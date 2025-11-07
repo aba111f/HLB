@@ -5,6 +5,7 @@ import { RegisterComponent } from './shared/components/register/register.compone
 import { LoginComponent } from './shared/components/login/login.component';
 import { UserSearchComponent } from './shared/components/user-search/user-search.component';
 import { ProfileBooksComponent } from './shared/components/profile-books/profile-books.component';
+import { ExchangeRequestComponent } from './shared/components/exchange-request/exchange-request.component';
 
 export const routes: Routes = [
     {
@@ -32,5 +33,9 @@ export const routes: Routes = [
         component: UserSearchComponent 
     },
     
+    {
+        path:'exchange-requests',
+        component: ExchangeRequestComponent
+    }
 
 ];

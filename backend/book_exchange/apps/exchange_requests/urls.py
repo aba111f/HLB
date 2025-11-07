@@ -5,7 +5,7 @@ from .views import  ExchangeRequestViewSet
 
 router = DefaultRouter() 
 
-router.register(r'', ExchangeRequestViewSet, basename='exchange-request')
+router.register(r'', ExchangeRequestViewSet, basename='exchange-requests')
 
 urlpatterns = [
     path('', include(router.urls)),

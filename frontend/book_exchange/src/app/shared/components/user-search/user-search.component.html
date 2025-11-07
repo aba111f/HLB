@@ -30,6 +30,7 @@
         <p><b>Condition:</b> {{ user.condition }}</p>
         <!-- <p><b>Description:</b> {{ user.description }}</p> -->
         <p><b>Created at: </b> {{ user.created_at | date:'short'}}</p>
+        <a (click)="goExhangeRequests()">Exchange</a>
       </div>
     </div>
   </div>

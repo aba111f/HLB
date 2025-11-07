@@ -3,6 +3,7 @@ import { UserSearchService } from '../../../core/services/user_search/user-searc
 import { BookUser, Result } from '../../interface/book-user';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   imports: [FormsModule, CommonModule],
@@ -19,7 +20,10 @@ export class UserSearchComponent {
   book_image_preview: string = '';
   exchangeOptions = ['Exchange', 'Lend', 'Giveaway'];
 
-  constructor(private userSearchService: UserSearchService) {}
+  constructor(
+    private userSearchService: UserSearchService, 
+    private router: Router,
+  ) {}
 
   search() {
     const filters = {
@@ -39,5 +43,8 @@ export class UserSearchComponent {
       },
       error: err => console.error(err)
     });
+  }
+  goExhangeRequests() {
+    this.router.navigate(['/exchange-requests']);
   }
 }
