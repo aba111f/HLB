@@ -21,6 +21,6 @@ export class UserSearchService {
     Object.entries(filters).forEach(([key, value]) => {
       if (value) form.append(key, value);
     });
-    return this.http.post<Result>(this.apiUrl+'search/', form);
+    return this.http.post<Result>(this.apiUrl+'search/search_books/', form);
   }
 }
