@@ -15,12 +15,38 @@ from django.views.decorators.csrf import csrf_exempt
 from django_elasticsearch_dsl.search import Search
 from apps.api.documents import BookDocument
 
+from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
+
 logger = logging.getLogger(__name__)
 
+login_request_schema = openapi.Schema(
+    type=openapi.TYPE_OBJECT,
+    required=['email', 'password'],
+    properties={
+        'email': openapi.Schema(type=openapi.TYPE_STRING),
+        'password': openapi.Schema(type=openapi.TYPE_STRING),
+    }
+)
 
-@action(detail=False, methods=['Create'], permission_classes=[AllowAny])
+login_response_schema = openapi.Schema(
+    type=openapi.TYPE_OBJECT,
+    properties={
+        'id': openapi.Schema(type=openapi.TYPE_STRING),
+        'refresh': openapi.Schema(type=openapi.TYPE_STRING),
+        'access': openapi.Schema(type=openapi.TYPE_STRING),
+    }
+)
+
+
 class CustomLoginView(viewsets.ViewSet):
     permission_classes = [AllowAny]
+
+    @swagger_auto_schema(
+        request_body=login_request_schema,
+        responses={200: login_response_schema},
+        operation_description="Custom login returning JWT tokens + user id"
+    )
 
     def create(self, request):
         email = request.data.get("email")
@@ -46,30 +72,52 @@ class CustomLoginView(viewsets.ViewSet):
 
 
 
-@csrf_exempt
-@action(detail=False, methods=['post'], permission_classes=[AllowAny])
-def search_books(request):
-    
-    if request.method == 'POST':
-        title = request.POST.get('title')
-        author = request.POST.get('author') 
-        genre = request.POST.get('genre')
-        availability = request.POST.get('availability')
+class SearchViewSet(viewsets.ViewSet):
+    permission_classes = [AllowAny]
+
+    @swagger_auto_schema(
+        method='post',
+        operation_description="Search books in Elasticsearch",
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'title': openapi.Schema(type=openapi.TYPE_STRING),
+                'author': openapi.Schema(type=openapi.TYPE_STRING),
+                'genre': openapi.Schema(type=openapi.TYPE_STRING),
+                'availability': openapi.Schema(type=openapi.TYPE_STRING),
+            }
+        ),
+        responses={200: openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'results': openapi.Schema(
+                    type=openapi.TYPE_ARRAY,
+                    items=openapi.Schema(type=openapi.TYPE_OBJECT)
+                )
+            }
+        )}
+    )
+    @action(detail=False, methods=['post'])
+    def search_books(self, request):
+        title = request.data.get('title')
+        author = request.data.get('author')
+        genre = request.data.get('genre')
+        availability = request.data.get('availability')
 
         search = BookDocument.search()
 
         if title:
             search = search.query('match', title={'query': title, 'fuzziness': 'AUTO'})
-        if author: 
-            search = search.query('match', author={'query': author, 'fuzziness': "AUTO"})
+        if author:
+            search = search.query('match', author={'query': author, 'fuzziness': 'AUTO'})
         if genre:
-            search = search.query('match', genre={'query': genre, 'fuzziness': "AUTO"})
+            search = search.query('match', genre={'query': genre, 'fuzziness': 'AUTO'})
         if availability:
-            search = search.query('match', availability={'query': availability, 'fuzziness': "AUTO"})
+            search = search.query('match', availability={'query': availability, 'fuzziness': 'AUTO'})
 
         response = search.execute()
-        
-        results = [ 
+
+        results = [
             {
                 'title': hit.title,
                 'author': hit.author,
@@ -80,12 +128,9 @@ def search_books(request):
                 'description': hit.description,
                 'availability': hit.availability,
                 'created_at': hit.created_at,
-                'book_image': hit.book_image
-
+                'book_image': hit.book_image,
             }
             for hit in response
         ]
-        return JsonResponse({'results': results}, status=200)
-    return JsonResponse({'error': 'Only POST method allowed'}, status=405)
 
-
+        return Response({'results': results}, status=200)
