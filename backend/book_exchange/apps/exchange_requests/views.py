@@ -11,6 +11,8 @@ from apps.books.models import Book
 from .models import ExchangeRequest
 from .serializers import ExchangeRequestSerializer
 
+from django.core.cache import cache
+
 logger = logging.getLogger(__name__)
 
 
@@ -29,6 +31,26 @@ class ExchangeRequestViewSet(viewsets.ModelViewSet):
          - requested_book_id (required)
          - message (optional)
         """
+
+        # Redis Limit request Per Hour
+        user_id = request.user.id
+        rate_limit_key = f"user:{user_id}_exchange_create_hourly"
+
+        request_count = cache.get(rate_limit_key)
+
+        MAX_REQUESTS_PER_HOUR = 10
+
+        if request_count is not None and int(request_count) >= MAX_REQUESTS_PER_HOUR:
+            logger.warning(f"Rate limit exceeded for user {request.user.email}")
+            return Response({"error": "Too many requests for an hour"}, 
+                status=status.HTTP_429_TOO_MANY_REQUESTS
+            )
+        
+        if request_count is None:
+            cache.set(rate_limit_key, 1, timeout=3600)
+        else:
+            cache.incr(rate_limit_key)
+
         from_email = request.data.get("from_email") or getattr(request.user, "email", None)
         to_email = request.data.get("to_email")
         exchange_type = request.data.get("exchange_type")

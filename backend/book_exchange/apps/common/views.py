@@ -52,7 +52,7 @@ def search_books(request):
     
     if request.method == 'POST':
         title = request.POST.get('title')
-        author = request.POST.get('author')
+        author = request.POST.get('author') 
         genre = request.POST.get('genre')
         availability = request.POST.get('availability')
 
