@@ -1,0 +1,37 @@
+version: '3.8'
+
+include:
+  - path: ./back1/docker-compose.yml
+
+
+services:
+  backend: 
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: backend
+    depends_on:
+      db:
+        condition: service_healthy
+      redis: 
+        condition: service_started
+      elastic-search:
+        condition: service_started
+
+    ports: 
+      - "8000:8000"
+    environment:
+      DATABASE_URL: postgres://postgres:postgres@db:5432/book_exchange_db
+      REDIS_HOST: redis
+      ELASTICSEARCH_HOST: elastic-search
+      DJANGO_SETTINGS_MODULE: book_exchange.settings.development
+      
+  frontend:
+    build: 
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: frontend
+    ports: 
+      - "80:80"
+    depends_on:
+      - backend

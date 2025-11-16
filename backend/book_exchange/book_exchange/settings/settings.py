@@ -18,6 +18,7 @@ from datetime import timedelta
 import coloredlogs
 import logging
 
+
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(days=365),  
     'REFRESH_TOKEN_LIFETIME': timedelta(days=730),   
@@ -28,6 +29,9 @@ coloredlogs.install(level='DEBUG', logger=logging.getLogger('api'))
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
+ENV_Path = BASE_DIR.parents[2] / '.env'
+# print(ENV_Path)
+load_dotenv(dotenv_path=ENV_Path)
 
 
 MEDIA_URL = '/media/'
@@ -38,10 +42,14 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-t3tug6#sjwah$ndgoiq*uxvn70kncb$sml%0w9jpr7v52_mwv#'
+DJ_SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
+
+SECRET_KEY = DJ_SECRET_KEY
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG_VALUE = os.getenv('DJANGO_DEBUG_VALUE')
+
+DEBUG = DEBUG_VALUE
 
 ALLOWED_HOSTS = []
 CORS_ORIGIN_WHITELIST = ["http://localhost:4200"]
@@ -131,9 +139,7 @@ WSGI_APPLICATION = 'book_exchange.wsgi.application'
 
 
 
-ENV_Path = BASE_DIR.parents[2] / '.env'
-# print(ENV_Path)
-load_dotenv(dotenv_path=ENV_Path)
+
 
 tmpPostgres = urlparse(os.getenv("DATABASE_URL"))
 # print(BASE_DIR.parent.parent.parent)

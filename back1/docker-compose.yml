@@ -1,0 +1,45 @@
+services: 
+  db:
+    image: postgres:14-alpine
+    container_name: db
+    environment:
+      POSTGRES_DB: book_exchange_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+
+  redis:
+    image: redis:8.4-rc1-alpine3.22
+    container_name: redis1.0
+    ports:
+      - "6379:6379"
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped 
+
+  elastic-search:
+    image: docker.elastic.co/elasticsearch/elasticsearch:9.1.5-amd64
+    volumes:
+      - esdata01:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+  
+    
+volumes:
+  postgres_data:
+  esdata01:
+  redis_data:
