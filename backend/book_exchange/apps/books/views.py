@@ -8,6 +8,8 @@ from .serializers import BookSerializer
 
 from django.core.cache import cache
 
+from apps.kafka.producers.producer_general import send_message
+
 logger = logging.getLogger(__name__)
 
 
@@ -15,6 +17,32 @@ class BookViewSet(viewsets.ModelViewSet):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
     permission_classes = [IsAuthenticated]
+
+    def create(self, request):
+        title = request.data.get("title")
+        author = request.data.get("author")
+        genre = request.data.get("genre")
+        condition = request.data.get("condition")
+        description = request.data.get("description")
+        availability = request.data.get("availability")
+        book_image = request.data.get("book_image")
+
+        if not title:
+            return Response({"error": "title is required"}, status=400)
+
+        payload = {
+            "owner_email": request.user.email,
+            "title": title,
+            "author": author,
+            "genre": genre,
+            "condition": condition,
+            "description": description,
+            "availability": availability,
+            "book_image": book_image
+        }
+
+        send_message("books", payload)
+        return Response({"status": "Book creation sent to Kafka"}, status=202)
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)

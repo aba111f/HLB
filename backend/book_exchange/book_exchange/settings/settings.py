@@ -201,6 +201,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = "users.User"
 
+LOG_DIR = BASE_DIR / "logs"
+os.makedirs(LOG_DIR, exist_ok=True)
+
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -221,7 +225,7 @@ LOGGING = {
         },
         'file': {
             'class': 'logging.FileHandler',
-            'filename': 'logs/app.log',
+            'filename': LOG_DIR / 'app.log',
             'formatter': 'json',
         },
     },
