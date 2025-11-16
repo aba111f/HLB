@@ -32,22 +32,22 @@ class ExchangeRequestViewSet(viewsets.ModelViewSet):
          - message (optional)
         """
 
-        # Redis Limit request Per Hour
+        # Redis Limit request Per Minute
         user_id = request.user.id
-        rate_limit_key = f"user:{user_id}_exchange_create_hourly"
+        rate_limit_key = f"user:{user_id}_exchange_create_minute"
 
         request_count = cache.get(rate_limit_key)
 
-        MAX_REQUESTS_PER_HOUR = 10
+        MAX_REQUESTS_PER_MINUTE = 10
 
-        if request_count is not None and int(request_count) >= MAX_REQUESTS_PER_HOUR:
+        if request_count is not None and int(request_count) >= MAX_REQUESTS_PER_MINUTE:
             logger.warning(f"Rate limit exceeded for user {request.user.email}")
             return Response({"error": "Too many requests for an hour"}, 
                 status=status.HTTP_429_TOO_MANY_REQUESTS
             )
         
         if request_count is None:
-            cache.set(rate_limit_key, 1, timeout=3600)
+            cache.set(rate_limit_key, 1, timeout=60)
         else:
             cache.incr(rate_limit_key)
 

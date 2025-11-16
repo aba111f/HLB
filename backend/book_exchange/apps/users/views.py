@@ -1,3 +1,4 @@
+import hashlib
 import logging
 from django.contrib.auth import authenticate
 from django.shortcuts import get_object_or_404
@@ -7,6 +8,8 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.decorators import action
 from .models import User
 from .serializers import UserSerializer
+
+from django.core.cache import cache
 
 logger = logging.getLogger(__name__)
 
@@ -56,10 +59,27 @@ class UserViewSet(viewsets.ModelViewSet):
         return Response({f"User deleted: {instance.email}"}, status=200)
 
     def list(self, request, *args, **kwargs):
+        cache_key = "users_list_all"
+        cached_data = cache.get(cache_key)
+
+        if cached_data:
+            logger.info(f"Cache HIT for 'users_list_all' by {request.user.email}")
+            return Response(cached_data)
+        
+        logger.info(f"Cache MISS for 'users_list_all' by {request.user.email}")
+
+
         users = self.get_queryset()
         logger.info(f"User list requested by {request.user.email}")
         serializer = self.get_serializer(users, many=True)
+
+        cache.set(cache_key, serializer.data, timeout=600)
+
         return Response(serializer.data)
+    
+    def get(self, request, *args, **kwargs):
+        cache_key = 'current_user'
+        
 
     @action(detail=False, methods=["post"], permission_classes=[IsAuthenticated])
     def filter_users(self, request):
@@ -69,6 +89,17 @@ class UserViewSet(viewsets.ModelViewSet):
         if not isinstance(cities, list) or not isinstance(books, list):
             logger.warning(f"Invalid filter input: {request.data}")
             return Response({"error": "Cities and books must be lists"}, status=400)
+        
+        filter_repr = f"cities:{','.join(cities)}_books:{','.join(books)}"
+        filter_hash = hashlib.md5(filter_repr.encode('utf-8')).hexdigest()
+        cache_key = f"user_filter_cache_{filter_hash}"
+
+        cached_data = cache.get(cache_key)
+        if cached_data:
+            logger.info(f"Cache HIT for user filter: {filter_hash}")
+            return Response(cached_data)
+
+        logger.info(f"Cache MISS for user filter: {filter_hash}")
 
         users = User.objects.all()
         if cities:
@@ -78,4 +109,7 @@ class UserViewSet(viewsets.ModelViewSet):
 
         logger.info(f"User filter applied: cities={cities}, books={books}")
         serializer = self.get_serializer(users, many=True)
+
+        cache.set(cache_key, serializer.data, timeout=600)
+
         return Response(serializer.data)

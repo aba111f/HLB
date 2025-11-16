@@ -18,6 +18,8 @@ from apps.api.documents import BookDocument
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 
+from django.core.cache import cache
+
 logger = logging.getLogger(__name__)
 
 login_request_schema = openapi.Schema(
@@ -64,12 +66,14 @@ class CustomLoginView(viewsets.ViewSet):
         refresh = RefreshToken.for_user(user)
         logger.info(f"User {user.email} logged in successfully")
 
+
         return Response({
             "id": user.id,
             "refresh": str(refresh),
             "access": str(refresh.access_token)
         }, status=200)
 
+   
 
 
 class SearchViewSet(viewsets.ViewSet):
@@ -99,6 +103,26 @@ class SearchViewSet(viewsets.ViewSet):
     )
     @action(detail=False, methods=['post'])
     def search_books(self, request):
+
+        # Redis Limit request Per Minute
+        user_id = request.user.id
+        rate_limit_key = f"user:{user_id}_common_search_books_minute"
+
+        request_count = cache.get(rate_limit_key)
+
+        MAX_REQUESTS_PER_MINUTE = 10
+
+        if request_count is not None and int(request_count) >= MAX_REQUESTS_PER_MINUTE:
+            logger.warning(f"Rate limit exceeded for user {request.user.email}")
+            return Response({"error": "Too many requests for an hour"}, 
+                status=status.HTTP_429_TOO_MANY_REQUESTS
+            )
+        
+        if request_count is None:
+            cache.set(rate_limit_key, 1, timeout=60)
+        else:
+            cache.incr(rate_limit_key)
+
         title = request.data.get('title')
         author = request.data.get('author')
         genre = request.data.get('genre')
