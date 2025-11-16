@@ -28,6 +28,7 @@ urlpatterns = [
     path('books/', include('apps.books.urls')),
     path('exchange-requests/', include('apps.exchange_requests.urls')),
     path('common/', include('apps.common.urls')),
+    path('',include('book_exchange.swagger')),
 ]
 
 if settings.DEBUG:
