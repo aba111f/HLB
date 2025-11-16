@@ -4,3 +4,11 @@
 /backend/book_exchange/apps/api/__pycache__
 /backend/book_exchange/book_exchange/__pycache__
 /backend/book_exchange/book_exchange/settings/__pycache__
+/backend/book_exchange/apps/books/__pycache__
+/backend/book_exchange/apps/books/migations
+/backend/book_exchange/apps/users/migations
+/backend/book_exchange/apps/users/__pycache__
+/backend/book_exchange/apps/common/__pycache__
+/backend/book_exchange/apps/common/migations
+/backend/book_exchange/apps/exchange_request/__pycache__
+/backend/book_exchange/apps/exchange_request/migations
