@@ -16,10 +16,10 @@ export const routes: Routes = [
         path: 'profile',
         component: ProfileComponent
     },
-    {
-        path:'books', 
-        component: ProfileBooksComponent 
-    },
+    // {
+    //     path:'books', 
+    //     component: ProfileBooksComponent 
+    // },
     {
         path:'register',
         component: RegisterComponent
