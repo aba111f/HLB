@@ -17,6 +17,17 @@ class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
+    def _clear_user_caches(self, user_id=None):
+        keys_to_delete = ["users_list_all"]
+
+        if user_id:
+            keys_to_delete.append(f'current_user:{user_id}')
+
+        cache.delete_pattern("user_filter_cache_*") 
+        
+        cache.delete_many(keys_to_delete)
+        logger.info(f"Caches deleted: {keys_to_delete}")
+
     def get_permissions(self):
         if self.action in ["create"]:
             return [AllowAny()]
@@ -30,6 +41,7 @@ class UserViewSet(viewsets.ModelViewSet):
         try:
             self.perform_create(serializer)
             logger.info(f"User created: {serializer.data['email']}")
+            self._clear_user_caches(user_id=serializer.instance.id)
         except Exception as e:
             logger.exception("Unexpected error during user creation")
             return Response({"error": str(e)}, status=500)
@@ -55,6 +67,9 @@ class UserViewSet(viewsets.ModelViewSet):
 
         instance = get_object_or_404(User, pk=uuid)
         self.perform_destroy(instance)
+        
+        self._clear_user_caches(user_id=instance.id)
+
         logger.info(f"User deleted: {instance.email}")
         return Response({f"User deleted: {instance.email}"}, status=200)
 
@@ -77,9 +92,23 @@ class UserViewSet(viewsets.ModelViewSet):
 
         return Response(serializer.data)
     
-    def get(self, request, *args, **kwargs):
-        cache_key = 'current_user'
+    def retrieve(self, request, *args, **kwargs):
+        pk = kwargs.get("pk")
+        cache_key = f'user_detail:{pk}' 
+
+        cached_data = cache.get(cache_key)
         
+        if cached_data:
+             logger.info(f"Cache HIT for user detail: {pk}")
+             return Response(cached_data)
+
+        
+        instance = self.get_object() 
+        serializer = self.get_serializer(instance)
+
+        cache.set(cache_key, serializer.data, timeout=600)
+        return Response(serializer.data)
+
 
     @action(detail=False, methods=["post"], permission_classes=[IsAuthenticated])
     def filter_users(self, request):
