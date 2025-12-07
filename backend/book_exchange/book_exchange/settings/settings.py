@@ -29,14 +29,22 @@ coloredlogs.install(level='DEBUG', logger=logging.getLogger('api'))
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
-ENV_Path = BASE_DIR.parents[2] / '.env'
-# print(ENV_Path)
+# Safely resolve ENV_Path: works both on host and in Docker containers
+# On host: BASE_DIR is .../Book_Exchange/backend/book_exchange, so parents[2] is project root
+# In Docker: BASE_DIR may be /app/book_exchange, so we check and adjust
+if len(BASE_DIR.parents) >= 3:
+    ENV_Path = BASE_DIR.parents[2] / '.env'
+else:
+    # Fallback: look for .env in current directory or parent
+    ENV_Path = BASE_DIR.parent / '.env'
+    if not ENV_Path.exists():
+        ENV_Path = BASE_DIR / '.env'
+
 load_dotenv(dotenv_path=ENV_Path)
 
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-# print(MEDIA_ROOT)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
@@ -51,8 +59,15 @@ DEBUG_VALUE = os.getenv('DJANGO_DEBUG_VALUE')
 
 DEBUG = DEBUG_VALUE
 
-ALLOWED_HOSTS = []
-CORS_ORIGIN_WHITELIST = ["http://localhost:4200"]
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+    '::1',
+]
+
+CORS_ORIGIN_WHITELIST = [
+    'http://localhost:4200',
+]
 
 # Application definition
 
@@ -137,12 +152,7 @@ WSGI_APPLICATION = 'book_exchange.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-
-
-
-
 tmpPostgres = urlparse(os.getenv("DATABASE_URL"))
-# print(BASE_DIR.parent.parent.parent)
 port = os.getenv("DB_PORT")
 
 DATABASES = {
@@ -156,6 +166,12 @@ DATABASES = {
         'OPTIONS': dict(parse_qsl(tmpPostgres.query)),
     }
 }
+
+
+
+
+
+
 
 ELASTICSEARCH_DSL = {
     'default': {
@@ -208,8 +224,14 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = "users.User"
 
 LOG_DIR = BASE_DIR / "logs"
+# ensure project-root logs directory exists as some scripts may resolve BASE_DIR differently
+ROOT_LOG_DIR = BASE_DIR.parents[2] / "logs" if len(BASE_DIR.parents) >= 3 else (BASE_DIR / ".." / "logs")
 os.makedirs(LOG_DIR, exist_ok=True)
-
+try:
+    os.makedirs(ROOT_LOG_DIR, exist_ok=True)
+except Exception:
+    # tolerate failures creating the extra folder
+    pass
 
 LOGGING = {
     'version': 1,
@@ -231,7 +253,8 @@ LOGGING = {
         },
         'file': {
             'class': 'logging.FileHandler',
-            'filename': LOG_DIR / 'app.log',
+            # FileHandler expects a string path on some platforms; ensure we store a string
+            'filename': str(LOG_DIR / 'app.log'),
             'formatter': 'json',
         },
     },

@@ -11,11 +11,16 @@ services:
       dockerfile: Dockerfile
     container_name: backend
     depends_on:
-      db:
-        condition: service_healthy
+      # db:
+      #   condition: service_healthy
       redis: 
         condition: service_started
       elastic-search:
+        condition: service_started
+
+      zookeeper:
+        condition: service_started
+      kafka:
         condition: service_started
 
     ports: 
@@ -32,6 +37,6 @@ services:
       dockerfile: Dockerfile
     container_name: frontend
     ports: 
-      - "80:80"
+      - "4200:4200"
     depends_on:
       - backend

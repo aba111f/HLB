@@ -28,6 +28,6 @@ COPY book_exchange/nginx.conf /etc/nginx/conf.d/default.conf
 # Copy built Angular files
 COPY --from=builder /app/dist/book_exchange/ /usr/share/nginx/html/
 
-EXPOSE 80
+EXPOSE 4200
 
 CMD ["nginx", "-g", "daemon off;"]
