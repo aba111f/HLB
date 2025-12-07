@@ -32,15 +32,17 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 # Safely resolve ENV_Path: works both on host and in Docker containers
 # On host: BASE_DIR is .../Book_Exchange/backend/book_exchange, so parents[2] is project root
 # In Docker: BASE_DIR may be /app/book_exchange, so we check and adjust
-if len(BASE_DIR.parents) >= 3:
-    ENV_Path = BASE_DIR.parents[2] / '.env'
-else:
-    # Fallback: look for .env in current directory or parent
-    ENV_Path = BASE_DIR.parent / '.env'
-    if not ENV_Path.exists():
-        ENV_Path = BASE_DIR / '.env'
 
-load_dotenv(dotenv_path=ENV_Path)
+
+# if len(BASE_DIR.parents) >= 3:
+#     ENV_Path = BASE_DIR.parents[2] / '.env'
+# else:
+#     # Fallback: look for .env in current directory or parent
+#     ENV_Path = BASE_DIR.parent / '.env'
+#     if not ENV_Path.exists():
+#         ENV_Path = BASE_DIR / '.env'
+
+# load_dotenv(dotenv_path=ENV_Path)
 
 
 MEDIA_URL = '/media/'
@@ -50,12 +52,12 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-DJ_SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
+DJ_SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 
 SECRET_KEY = DJ_SECRET_KEY
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG_VALUE = os.getenv('DJANGO_DEBUG_VALUE')
+DEBUG_VALUE = os.environ.get('DJANGO_DEBUG_VALUE')
 
 DEBUG = DEBUG_VALUE
 
@@ -152,8 +154,8 @@ WSGI_APPLICATION = 'book_exchange.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-tmpPostgres = urlparse(os.getenv("DATABASE_URL"))
-port = os.getenv("DB_PORT")
+tmpPostgres = urlparse(os.environ.get("DATABASE_URL"))
+port = os.environ.get("DB_PORT")
 
 DATABASES = {
     'default': {

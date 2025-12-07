@@ -26,7 +26,7 @@ FROM nginx:alpine
 COPY book_exchange/nginx.conf /etc/nginx/conf.d/default.conf
 
 # Copy built Angular files
-COPY --from=builder /app/dist/book_exchange/ /usr/share/nginx/html/
+COPY --from=builder /app/dist/book_exchange/browser/ /usr/share/nginx/html/
 
 EXPOSE 4200
 

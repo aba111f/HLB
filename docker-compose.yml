@@ -10,6 +10,8 @@ services:
       context: ./backend
       dockerfile: Dockerfile
     container_name: backend
+    env_file:
+      - ../.env
     depends_on:
       # db:
       #   condition: service_healthy
@@ -24,12 +26,12 @@ services:
         condition: service_started
 
     ports: 
-      - "8000:8000"
+      - "8000:7100"
     environment:
-      DATABASE_URL: postgres://postgres:postgres@db:5432/book_exchange_db
-      REDIS_HOST: redis
-      ELASTICSEARCH_HOST: elastic-search
-      DJANGO_SETTINGS_MODULE: book_exchange.settings.development
+      - REDIS_HOST=redis
+      - ELASTICSEARCH_HOST=elastic-search
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:29092
+      - DJANGO_SETTINGS_MODULE=book_exchange.settings.development
       
   frontend:
     build: 
@@ -37,6 +39,6 @@ services:
       dockerfile: Dockerfile
     container_name: frontend
     ports: 
-      - "4200:4200"
+      - "4200:80"
     depends_on:
       - backend

@@ -20,13 +20,14 @@ from apps.books.models import Book
 from apps.exchange_requests.models import ExchangeRequest
 
 logger = logging.getLogger(__name__)
+kafka_server = os.environ.get('KAFKA_BOOTSTRAP_SERVERS', 'localhost:9092')
 
 conf = {
-    'bootstrap.servers': 'localhost:9092',
+    'bootstrap.servers': kafka_server,
     'group.id': 'exchange_requests_group',
     'auto.offset.reset': 'earliest'
 }
-
+print(f"Connecting to Kafka at: {kafka_server}")
 consumer = Consumer(conf)
 consumer.subscribe(['exchange_requests', 'books'])
 

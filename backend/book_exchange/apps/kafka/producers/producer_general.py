@@ -1,11 +1,14 @@
 from confluent_kafka import Producer
 import json
 import logging
+import os
 
 logger = logging.getLogger(__name__)
 
+kafka_server = os.environ.get('KAFKA_BOOTSTRAP_SERVERS', 'localhost:9092')
+
 conf = {
-    'bootstrap.servers': 'localhost:9092'
+    'bootstrap.servers': kafka_server
 }
 
 producer = Producer(conf)
